@@ -11,7 +11,7 @@ obstacle_detection_images = {
     'Submission3': 'obstacle3.jpg',
 }
 
-st.title("Obstacle Detector")
+st.title("TraffMind AI Obstacle Detector")
 
 # Introduction and user guidance
 st.markdown("""
