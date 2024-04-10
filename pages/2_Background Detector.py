@@ -11,7 +11,7 @@ background_images = {
     'Submission3': 'background3.jpg',
 }
 
-st.title("Background Detector")
+st.title("TraffMind AI Background Detector")
 
 # Introduction and user guidance
 st.markdown("""
