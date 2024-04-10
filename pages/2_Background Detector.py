@@ -29,8 +29,11 @@ with st.sidebar:
 # Main panel for displaying the background image
 st.header("Extracted Background Image")
 
-# Retrieve the file path or URL from the dictionary based on the selection
-background_image_path = background_images[selected_submission]
-
-# Load and display the background image
-st.image(background_image_path, caption=f"Background for {selected_submission}", use_column_width=True)
+try:
+    # Retrieve the file path or URL from the dictionary based on the selection
+    background_image_path = background_images[selected_submission]
+    
+    # Attempt to display the background image
+    st.image(background_image_path, caption=f"Background for {selected_submission}", use_column_width=True)
+except Exception as e:
+    st.error("The background image for this submission is currently unavailable.")
