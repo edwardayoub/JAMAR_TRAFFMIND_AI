@@ -17,13 +17,13 @@ Welcome to our video traffic analysis portal. Here, you can submit your traffic 
 """)
 
 # Video selection dropdown
-selected_video = st.selectbox("Select a video", options=video_list)
+selected_video = st.sidebar.selectbox("Select a video", options=video_list)
 
 # Submission name input
-submission_name = st.text_input("Submission Name", placeholder="Enter a name for your submission...")
+submission_name = st.sidebar.text_input("Submission Name", placeholder="Enter a name for your submission...")
 
 # Submit button
-if st.button("Submit"):
+if st.sidebar.button("Submit"):
     st.success(f"Submission '{submission_name}' for '{selected_video}' received!")
 
 # Previewing the selected video
