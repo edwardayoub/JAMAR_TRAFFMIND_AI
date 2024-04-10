@@ -6,7 +6,7 @@ st.set_page_config(layout="wide")
 # Example list of videos - assuming this could be empty or have invalid entries
 video_list = ['Video1.mp4', 'Video2.mp4', 'Video3.mp4']  # Update this with actual videos
 
-st.header("Job Submission for Video Traffic Analysis")
+st.header("TraffMind AI Job Submission")
 
 st.markdown("""
 Welcome to our video traffic analysis portal. Here, you can submit your traffic videos for analysis. Follow the steps below to get started:
