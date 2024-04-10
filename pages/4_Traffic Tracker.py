@@ -1,6 +1,5 @@
 import streamlit as st
 from PIL import Image
-import base64
 
 st.set_page_config(layout="wide")
 
@@ -12,7 +11,7 @@ processed_videos = {
     'Submission3': 'processed_video3.mp4',
 }
 
-st.title("TraffMind AI Traffic Tracker")
+st.title("Traffic Tracker Processed Videos")
 
 # Introduction and user guidance
 st.markdown("""
@@ -28,26 +27,25 @@ with st.sidebar:
     # Dropdown menu for selecting a submission
     selected_submission = st.selectbox("Previous Submissions", options=list(processed_videos.keys()))
 
-    # Retrieve the file path or URL from the dictionary based on the selection
-    processed_video_path = processed_videos[selected_submission]
-
-    # Display a download button if the video is available
+    # Attempt to display a download button if the video is available
+    processed_video_path = processed_videos.get(selected_submission)
     if processed_video_path:
-        # This example assumes local file paths; adjust accordingly if using URLs
-        file_path = processed_video_path  # Ensure this is the correct path to the file on the server
-        with open(file_path, "rb") as file:
-            btn = st.download_button(
-                label="Download Processed Video",
-                data=file,
-                file_name=processed_video_path,
-                mime="video/mp4"
-            )
+        try:
+            with open(processed_video_path, "rb") as file:
+                btn = st.download_button(
+                    label="Download Processed Video",
+                    data=file,
+                    file_name=processed_video_path.split('/')[-1],  # Assumes file paths can have directories
+                    mime="video/mp4"
+                )
+        except FileNotFoundError:
+            st.error(f"The processed video file for '{selected_submission}' was not found.")
 
 # Main panel for displaying the processed video
 st.header("Processed Video with Traffic Tracker")
 
 if processed_video_path:
-    # Attempt to display the processed video
-    st.video(processed_video_path)
-else:
-    st.error("The processed video for this submission is currently unavailable.")
+    try:
+        st.video(processed_video_path)
+    except FileNotFoundError:
+        st.error("The processed video for this submission is currently unavailable.")
