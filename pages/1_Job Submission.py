@@ -27,23 +27,6 @@ def generate_presigned_url(s3_client, client_method, method_parameters, expires_
     return url
 
 
-def usage_demo():
-
-    access_key = 'AKIAR6R7K5AHM72MI4NS'
-    secret_key = '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'
-    s3_client = boto3.client("s3", region_name='us-east-2', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
-    url = generate_presigned_url(
-        s3_client, "put_object", {"Bucket": 'traffmind-client-videos-e2', "Key": '902-962_Standard_SCU2AD_raw_tracker_output.mp4'}, 1000
-    )
-
-    with open('/Users/clayoneil/dev/video-analysis/demo_output/2024-04-04-17-00-28/902-962_Standard_SCU2AD_raw_tracker_output.mp4', "rb") as object_file:
-        object_text = object_file.read()
-    response = requests.put(url, data=object_text)
-
-    if response is not None:
-        print("Got response:")
-        print(f"Status: {response.status_code}")
-        print(response.text)
 
 logger = logging.getLogger(__name__)
 
