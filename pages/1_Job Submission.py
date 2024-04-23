@@ -3,6 +3,7 @@ import logging
 import boto3
 from botocore.exceptions import ClientError
 import requests
+from lib import run
 
 def generate_presigned_url(s3_client, client_method, method_parameters, expires_in):
     """
@@ -70,10 +71,9 @@ if st.sidebar.button("Submit"):
             print("Got response:")
             print(f"Status: {response.status_code}")
             print(response.text)
-        # Process the video file
-        # Example: Save the uploaded file to a directory (if necessary)
-        # with open(os.path.join("path_to_directory", uploaded_video.name), "wb") as f:
-        #     f.write(uploaded_video.getvalue())
+        
+            if response.status_code == 200:
+                run(uploaded_video.name)
     else:
         st.sidebar.error("Please upload a video and provide a name for your submission.")
 
