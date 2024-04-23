@@ -62,7 +62,7 @@ if st.sidebar.button("Submit"):
         secret_key = '4aPgrXY+Zk9Q3yAVfzZB+mZG9ui0gJLUS4zY5UvF'
         s3_client = boto3.client("s3", region_name='us-east-2', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
         url = generate_presigned_url(
-            s3_client, "put_object", {"Bucket": 'traffmind-client-videos-e2', "Key": uploaded_video.name}, 1000
+            s3_client, "put_object", {"Bucket": 'traffmind-client-videos-e2', "Key": 'JAMAR/' + uploaded_video.name}, 1000
         )
      
         response = requests.put(url, data=uploaded_video.getvalue())
@@ -73,6 +73,7 @@ if st.sidebar.button("Submit"):
             print(response.text)
         
             if response.status_code == 200:
+                pass
                 run(uploaded_video.name)
     else:
         st.sidebar.error("Please upload a video and provide a name for your submission.")

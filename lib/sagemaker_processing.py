@@ -2,9 +2,11 @@ import boto3
 import sys
 import random
 import hashlib
+# import ResourceLimitExceeded
+from botocore.exceptions import ResourceLimitExceeded
 
 
-def start_sagemaker_processing_job(infile, environment_variables):
+def start_sagemaker_processing_job(infile,machine_type, environment_variables):
     # Initialize the SageMaker client
     sagemaker_client = boto3.client('sagemaker')
 
@@ -13,7 +15,7 @@ def start_sagemaker_processing_job(infile, environment_variables):
     out_bucket = "traffmind-client-videos-processed-e2"
     outfile = 'processed_' + infile
 
-    input_path = f's3://{bucket}/{infile}'
+    input_path = f's3://{bucket}/JAMAR/{infile}'
     output_path = f's3://{out_bucket}'
 
     # random number
@@ -58,7 +60,7 @@ def start_sagemaker_processing_job(infile, environment_variables):
         'ProcessingResources': {
             'ClusterConfig': {
                 'InstanceCount': 1,
-                'InstanceType': 'ml.c5.18xlarge',
+                'InstanceType': machine_type,
                 'VolumeSizeInGB': 1
             }
         },
@@ -74,5 +76,11 @@ def start_sagemaker_processing_job(infile, environment_variables):
 
 
 def run(infile):
-    
-    start_sagemaker_processing_job(infile, {"AWS": "True"})
+    machine_types = ["ml.m5.xlarge", "ml.m5.2xlarge", "ml.m5.4xlarge", "ml.m5.12xlarge", "ml.m5.24xlarge"]
+    while machine_types:
+        machine_type = machine_types.pop()
+        try:
+            start_sagemaker_processing_job(infile, machine_type, {"AWS": "True"})
+            break
+        except ResourceLimitExceeded as e:
+            print(e)
