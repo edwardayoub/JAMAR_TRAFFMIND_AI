@@ -3,7 +3,8 @@ import sys
 import random
 import hashlib
 # import ResourceLimitExceeded
-from botocore.exceptions import ResourceLimitExceeded
+from botocore.exceptions import ClientError
+
 
 
 def start_sagemaker_processing_job(infile,machine_type, environment_variables):
@@ -82,5 +83,5 @@ def run(infile):
         try:
             start_sagemaker_processing_job(infile, machine_type, {"AWS": "True"})
             break
-        except ResourceLimitExceeded as e:
+        except ClientError as e:
             print(e)

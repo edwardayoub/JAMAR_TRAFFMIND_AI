@@ -1,9 +1,10 @@
 import streamlit as st
+from lib import download_file, list_files
 
 st.set_page_config(layout="wide")
 
 # Example list of processed videos - this list is empty to simulate the current situation
-processed_videos = []  # Update this with actual processed videos once available
+processed_videos = list_files('traffmind-client-videos-processed-e2', '*')  # Update this with actual processed videos once available
 
 st.title("Traffic Tracker Processed Videos")
 
@@ -24,19 +25,17 @@ with st.sidebar:
 # Main panel for displaying the processed video
 st.header("Processed Video with Traffic Tracker")
 
+# if video selected, display download button, if clicked, download the video
 if processed_videos:
-    # If there are processed videos available, attempt to display the selected video
-    selected_video_path = processed_videos[selected_submission] if selected_submission in processed_videos else None
-    if selected_video_path:
-        st.video(selected_video_path)
-        # Display a download button for the selected video
-        with open(selected_video_path, "rb") as file:
-            st.sidebar.download_button(
-                label="Download Processed Video",
-                data=file,
-                file_name=selected_video_path.split('/')[-1],  # Assuming the path format allows this
-                mime="video/mp4"
-            )
+    if selected_submission:
+        if st.button("Download Video"):
+            download_file('traffmind-client-videos-processed-e2', selected_submission)
+            with open(selected_submission, "rb") as file:
+                file_bytes = file.read()
+            # auto click the download button
+
+            st.download_button(label="Click here to download the processed video", data=file_bytes, file_name=selected_submission)
+
 else:
     # Display a message indicating that no processed videos are currently available
     st.warning("There are no processed videos available at this time. Please check back later.")
