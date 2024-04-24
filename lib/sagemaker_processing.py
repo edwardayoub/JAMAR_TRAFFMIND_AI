@@ -17,7 +17,7 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
     outfile = 'processed_' + infile
 
     input_path = f's3://{bucket}/JAMAR/{infile}'
-    output_path = f's3://{out_bucket}/JAMAR'
+    output_path = f's3://{out_bucket}'
 
     # random number
     random_num = random.randint(0, 1000)
