@@ -34,7 +34,7 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
         'ProcessingJobName': processing_job_name,
         'RoleArn': 'arn:aws:iam::134350563342:role/service-role/AmazonSageMaker-ExecutionRole-20240119T144933',
         'AppSpecification': {
-            'ImageUri': '134350563342.dkr.ecr.us-east-2.amazonaws.com/traffmind:1.0.48',
+            'ImageUri': '134350563342.dkr.ecr.us-east-2.amazonaws.com/traffmind:1.0.50',
         },
         'ProcessingInputs': [{
             'InputName': 'input1',
