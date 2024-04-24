@@ -1,15 +1,16 @@
 import streamlit as st
 from PIL import Image
+from lib import download_file, list_files
 
 st.set_page_config(layout="wide")
 
 # Simulated mapping of submission names to background image files.
 # Replace these with your actual data.
-background_images = {
-    'Submission1': 'background1.jpg',
-    'Submission2': 'background2.jpg',
-    'Submission3': 'background3.jpg',
-}
+
+bucket = "traffmind-client-processed-jamar"
+
+# Example list of processed videos - this list is empty to simulate the current situation
+background_images = list_files(bucket, '*', 'png')  # Update this with actual processed videos once available
 
 st.title("TraffMind AI Background Detector")
 
@@ -24,16 +25,28 @@ Explore the power of our background detection technology. This feature allows yo
 with st.sidebar:
     st.header("Select Your Submission")
     # The keys of the dictionary are the submission names.
-    selected_submission = st.selectbox("Previous Submissions", options=list(background_images.keys()))
+    selected_submission = st.selectbox("Previous Submissions", options=background_images)
 
 # Main panel for displaying the background image
 st.header("Extracted Background Image")
 
+
+# if video selected, display download button, if clicked, download the video
+if background_images:
+    if selected_submission:
+        if st.button("Download Background Image"):
+            file_name = selected_submission.split("/")[-1]
+            download_file(bucket, file_name, selected_submission)
+            with open(file_name, "rb") as file:
+                print(f'reading file {file_name}')
+                file_bytes = file.read()
+
+            st.download_button(label="Click here to download the background image", data=file_bytes, file_name=selected_submission)
+
+
 try:
-    # Retrieve the file path or URL from the dictionary based on the selection
-    background_image_path = background_images[selected_submission]
-    
+
     # Attempt to display the background image
-    st.image(background_image_path, caption=f"Background for {selected_submission}", use_column_width=True)
+    st.image(file_name, caption=f"Background for {selected_submission}", use_column_width=True)
 except Exception as e:
     st.error("The background image for this submission is currently unavailable.")

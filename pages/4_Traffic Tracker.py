@@ -6,7 +6,7 @@ st.set_page_config(layout="wide")
 bucket = "traffmind-client-processed-jamar"
 
 # Example list of processed videos - this list is empty to simulate the current situation
-processed_videos = list_files(bucket, '*')  # Update this with actual processed videos once available
+processed_videos = list_files(bucket, '*', 'mp4')  # Update this with actual processed videos once available
 
 st.title("Traffic Tracker Processed Videos")
 
