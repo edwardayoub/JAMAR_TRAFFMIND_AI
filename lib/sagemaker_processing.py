@@ -17,7 +17,7 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
     outfile = 'processed_' + infile
 
     input_path = f's3://{bucket}/JAMAR/{infile}'
-    output_path = f's3://{out_bucket}'
+    output_path = f's3://{out_bucket}/JAMAR'
 
     # random number
     random_num = random.randint(0, 1000)
@@ -34,7 +34,7 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
         'ProcessingJobName': processing_job_name,
         'RoleArn': 'arn:aws:iam::134350563342:role/service-role/AmazonSageMaker-ExecutionRole-20240119T144933',
         'AppSpecification': {
-            'ImageUri': '134350563342.dkr.ecr.us-east-2.amazonaws.com/traffmind:1.0.45',
+            'ImageUri': '134350563342.dkr.ecr.us-east-2.amazonaws.com/traffmind:1.0.48',
         },
         'ProcessingInputs': [{
             'InputName': 'input1',
@@ -55,7 +55,17 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
                 "LocalPath": "/opt/ml/processing/output/",
                 "S3UploadMode": "EndOfJob"
             }
-        }]
+        },
+        {
+                "OutputName": "output2",
+                
+            "S3Output": {
+                "S3Uri": output_path,
+                "LocalPath": "/opt/ml/processing/median_frame/",
+                "S3UploadMode": "EndOfJob"
+            }
+        }
+        ]
         },
         'Environment': environment_variables,
         'ProcessingResources': {

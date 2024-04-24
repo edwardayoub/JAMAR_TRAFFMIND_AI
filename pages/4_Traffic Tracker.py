@@ -4,7 +4,7 @@ from lib import download_file, list_files
 st.set_page_config(layout="wide")
 
 # Example list of processed videos - this list is empty to simulate the current situation
-processed_videos = list_files('traffmind-client-videos-processed-e2', '*')  # Update this with actual processed videos once available
+processed_videos = list_files('traffmind-client-videos-processed-e2', 'JAMAR')  # Update this with actual processed videos once available
 
 st.title("Traffic Tracker Processed Videos")
 
@@ -29,8 +29,9 @@ st.header("Processed Video with Traffic Tracker")
 if processed_videos:
     if selected_submission:
         if st.button("Download Video"):
-            download_file('traffmind-client-videos-processed-e2', selected_submission)
+            download_file('traffmind-client-videos-processed-e2', selected_submission, selected_submission)
             with open(selected_submission, "rb") as file:
+                print(f'reading file {selected_submission}')
                 file_bytes = file.read()
             # auto click the download button
 
