@@ -4,14 +4,20 @@ import hashlib
 import datetime
 import time
 from botocore.exceptions import ClientError
+import os
 
+# read keys in from environment variables
+access_key = os.getenv("AWS_ACCESS_KEY_ID")
+secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+region = 'us-east-2'
 
 def start_sagemaker_processing_job(infile,machine_type, environment_variables):
     VERSION = "1.0.51"
     datetime_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
     # Initialize the SageMaker client
-    sagemaker_client = boto3.client('sagemaker')
+    sagemaker_client = boto3.client('sagemaker', region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
 
     # Specify the S3 bucket and file paths
     bucket = "traffmind-client-unprocessed-jamar"
