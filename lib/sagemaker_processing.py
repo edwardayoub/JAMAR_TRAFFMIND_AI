@@ -1,26 +1,29 @@
 import boto3
 import sys
-import random
 import hashlib
-# import ResourceLimitExceeded
+import datetime
+import time
 from botocore.exceptions import ClientError
 
 
-
 def start_sagemaker_processing_job(infile,machine_type, environment_variables):
+    VERSION = "1.0.51"
+    datetime_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+
     # Initialize the SageMaker client
     sagemaker_client = boto3.client('sagemaker')
 
     # Specify the S3 bucket and file paths
-    bucket = "traffmind-client-videos-e2"
-    out_bucket = "traffmind-client-videos-processed-e2"
-    outfile = 'processed_' + infile
+    bucket = "traffmind-client-unprocessed-jamar"
+    out_bucket = "traffmind-client-processed-jamar"
 
-    input_path = f's3://{bucket}/JAMAR/{infile}'
-    output_path = f's3://{out_bucket}'
+    input_path = f's3://{bucket}/{infile}'
+    output_path = f's3://{out_bucket}/{datetime_str}/'
 
-    # random number
-    random_num = random.randint(0, 1000)
+    # epoch
+    epoch_time = int(time.time())
+
+    version_number = VERSION.replace(".", "-")
 
     # hash filename
     hash_object = hashlib.md5(infile.encode())
@@ -29,12 +32,12 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
     
 
     # Define the processing job configuration
-    processing_job_name = f"{hash_filename}-{random_num}"
+    processing_job_name = f"fn-{hash_filename}-vn-{version_number}-e-{epoch_time}"
     processing_job_config = {
         'ProcessingJobName': processing_job_name,
         'RoleArn': 'arn:aws:iam::134350563342:role/service-role/AmazonSageMaker-ExecutionRole-20240119T144933',
         'AppSpecification': {
-            'ImageUri': '134350563342.dkr.ecr.us-east-2.amazonaws.com/traffmind:1.0.50',
+            'ImageUri': f'134350563342.dkr.ecr.us-east-2.amazonaws.com/traffmind:{VERSION}',
         },
         'ProcessingInputs': [{
             'InputName': 'input1',
@@ -87,7 +90,7 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
 
 
 def run(infile):
-    machine_types = ["ml.m5.xlarge", "ml.m5.2xlarge", "ml.m5.4xlarge", "ml.m5.12xlarge", "ml.m5.24xlarge"]
+    machine_types = ["ml.c5.xlarge", "ml.c5.2xlarge", "ml.c5.4xlarge", "ml.c5.9xlarge", "ml.c5.18xlarge"]
     while machine_types:
         machine_type = machine_types.pop()
         try:

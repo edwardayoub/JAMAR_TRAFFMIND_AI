@@ -4,6 +4,7 @@ import boto3
 from botocore.exceptions import ClientError
 import requests
 from lib import run
+import os
 
 def generate_presigned_url(s3_client, client_method, method_parameters, expires_in):
     """
@@ -56,13 +57,15 @@ else:
 if st.sidebar.button("Submit"):
     if uploaded_video is not None:
         st.sidebar.success("Your submission is received!")
-        
+        print(uploaded_video.name)
 
-        access_key = 'AKIAR6R7K5AHM72MI4NS'
-        secret_key = '4aPgrXY+Zk9Q3yAVfzZB+mZG9ui0gJLUS4zY5UvF'
+        # read keys in from environment variables
+        access_key = os.getenv("AWS_ACCESS_KEY_ID")
+        secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+
         s3_client = boto3.client("s3", region_name='us-east-2', aws_access_key_id=access_key, aws_secret_access_key=secret_key)
         url = generate_presigned_url(
-            s3_client, "put_object", {"Bucket": 'traffmind-client-videos-e2', "Key": 'JAMAR/' + uploaded_video.name}, 1000
+            s3_client, "put_object", {"Bucket": 'traffmind-client-unprocessed-jamar', "Key": uploaded_video.name}, 1000
         )
      
         response = requests.put(url, data=uploaded_video.getvalue())
@@ -73,7 +76,6 @@ if st.sidebar.button("Submit"):
             print(response.text)
         
             if response.status_code == 200:
-                pass
                 run(uploaded_video.name)
     else:
         st.sidebar.error("Please upload a video and provide a name for your submission.")
