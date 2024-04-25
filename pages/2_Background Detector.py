@@ -34,14 +34,13 @@ st.header("Extracted Background Image")
 # if video selected, display download button, if clicked, download the video
 if background_images:
     if selected_submission:
-        if st.button("Download Background Image"):
-            file_name = selected_submission.split("/")[-1]
-            download_file(bucket, file_name, selected_submission)
-            with open(file_name, "rb") as file:
-                print(f'reading file {file_name}')
-                file_bytes = file.read()
+        file_name = selected_submission.split("/")[-1]
+        download_file(bucket, file_name, selected_submission)
+        with open(file_name, "rb") as file:
+            print(f'reading file {file_name}')
+            file_bytes = file.read()
 
-            st.download_button(label="Click here to download the background image", data=file_bytes, file_name=selected_submission)
+        st.download_button(label="Click here to download the background image", data=file_bytes, file_name=selected_submission)
 
 
 try:
