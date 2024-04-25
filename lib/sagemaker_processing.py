@@ -7,7 +7,9 @@ from botocore.exceptions import ClientError
 import os
 
 import logging
-logger = logging.getLogger(__name__)
+import streamlit
+
+logger = logging.getLogger(streamlit.__name__)
 
 # read keys in from environment variables
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
