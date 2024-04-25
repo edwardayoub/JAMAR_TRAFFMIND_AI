@@ -1,6 +1,5 @@
 import streamlit as st
 from lib import get_s3_status
-import pandas as pd
 
 # Streamlit page setup
 st.title("S3 Bucket Processing Status")
