@@ -8,9 +8,10 @@ st.title("S3 Bucket Processing Status")
 if 'first_load' not in st.session_state:
     st.session_state['first_load'] = True
 
+# Auto-refresh on the initial load or when the refresh button is pressed
 if st.session_state['first_load'] or st.button('Refresh Data'):
     # Fetch data
-    data_df = get_s3_status(region, access_key, secret_key)
+    data_df = get_s3_status()
     # Display data
     st.dataframe(data_df)
     st.session_state['first_load'] = False
