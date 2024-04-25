@@ -6,6 +6,9 @@ import time
 from botocore.exceptions import ClientError
 import os
 
+import logging
+logger = logging.getLogger(__name__)
+
 # read keys in from environment variables
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
 secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
@@ -13,6 +16,7 @@ secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 region = 'us-east-2'
 
 def start_sagemaker_processing_job(infile,machine_type, environment_variables):
+    logger.info(f" starting sagemaker processing job for {infile}")
     VERSION = "1.0.51"
     datetime_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
@@ -104,3 +108,8 @@ def run(infile):
             break
         except ClientError as e:
             print(e)
+            logger.info(f"Failed to start processing job. error: {e}")
+        except Exception as e:
+            logger.info(f"Failed to start processing job. error: {e}")
+            print(e)
+            raise
