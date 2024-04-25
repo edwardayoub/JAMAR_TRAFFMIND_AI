@@ -26,3 +26,37 @@ def list_files(bucket_name, prefix, file_type='*'):
             files.append(obj['Key'])
 
     return files
+
+def get_s3_status(region, access_key, secret_key):
+    # Initialize S3 client with provided credentials
+    s3 = boto3.client("s3", region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+    
+    # List unprocessed files
+    unprocessed_files = s3.list_objects_v2(Bucket="traffmind-client-unprocessed-jamar")
+    status_df = pd.DataFrame(unprocessed_files['Contents'])
+    
+    # Format the dataframe for unprocessed files
+    status_df['LastModified'] = pd.to_datetime(status_df['LastModified'])
+    status_df['Job'] = status_df['Key'].apply(lambda x: x.split('/')[-1])
+    status_df['Job'] = status_df['Job'].apply(lambda x: x.split('.mp4')[0])
+    status_df['LastModified'] = status_df['LastModified'] - pd.Timedelta(hours=4)
+    status_df['Submission date'] = status_df['LastModified'].apply(lambda x: x.date())
+    status_df['Submission Time (EST)'] = status_df['LastModified'].apply(lambda x: x.time())
+    status_df['Submission Time (EST)'] = status_df['Submission Time (EST)'].apply(lambda x: x.strftime("%I:%M %p"))
+    
+    # List processed files
+    processed_files = s3.list_objects_v2(Bucket="traffmind-client-processed-jamar")
+    processed_files = pd.DataFrame(processed_files['Contents'])
+    
+    # Format the dataframe for processed files
+    processed_files['Job'] = processed_files['Key'].apply(lambda x: x.split('/')[-1])
+    processed_files['Job'] = processed_files['Job'].apply(lambda x: x.split('_median_frame.png')[0])
+    
+    # Determine the status of each job
+    status_df['Status'] = status_df['Job'].apply(lambda x: 'Finished' if x in list(processed_files['Job']) else 'Processing')
+    
+    # Arrange and sort the final status dataframe
+    status_df = status_df[['Job', 'Submission date', 'Submission Time (EST)', 'Status']]
+    status_df = status_df.sort_values(by=['Submission date', 'Submission Time (EST)'], ascending=False)
+    
+    return status_df
