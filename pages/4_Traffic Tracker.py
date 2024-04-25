@@ -30,14 +30,13 @@ st.header("Processed Video with Traffic Tracker")
 # if video selected, display download button, if clicked, download the video
 if processed_videos:
     if selected_submission:
-        if st.button("Download Video"):
-            file_name = selected_submission.split("/")[-1]
-            download_file(bucket, file_name, selected_submission)
-            with open(file_name, "rb") as file:
-                print(f'reading file {file_name}')
-                file_bytes = file.read()
+        file_name = selected_submission.split("/")[-1]
+        download_file(bucket, file_name, selected_submission)
+        with open(file_name, "rb") as file:
+            print(f'reading file {file_name}')
+            file_bytes = file.read()
 
-            st.download_button(label="Click here to download the processed video", data=file_bytes, file_name=selected_submission)
+        st.download_button(label="Click here to download the processed video", data=file_bytes, file_name=selected_submission)
 
 else:
     # Display a message indicating that no processed videos are currently available
