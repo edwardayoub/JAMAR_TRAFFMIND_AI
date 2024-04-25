@@ -27,7 +27,7 @@ def list_files(bucket_name, prefix, file_type='*'):
 
     return files
 
-def get_s3_status(region, access_key, secret_key):
+def get_s3_status():
     # Initialize S3 client with provided credentials
     s3 = boto3.client("s3", region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
     
