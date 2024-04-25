@@ -1,5 +1,6 @@
 import boto3
 import os
+import pandas as pd
 
 # read keys in from environment variables
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
