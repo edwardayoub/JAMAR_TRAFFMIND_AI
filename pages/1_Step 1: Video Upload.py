@@ -81,5 +81,5 @@ if st.button("Submit", key='submit'):
 st.markdown("""
 3. **Check Status**: Click the link below to check the status of your submission.
 """)
-st.page_link("Check Status", "https://jamar-traffmind-ai.streamlit.app/Job_Status")
+st.page_link("pages/2_Job Status.py" ,label = "Check Status")
 
