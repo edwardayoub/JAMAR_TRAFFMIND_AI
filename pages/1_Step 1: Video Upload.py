@@ -28,8 +28,6 @@ def generate_presigned_url(s3_client, client_method, method_parameters, expires_
         raise
     return url
 
-
-
 logger = logging.getLogger(__name__)
 
 st.set_page_config(layout="wide")
@@ -38,7 +36,8 @@ st.header("TraffMind AI Job Submission")
 
 st.markdown("""
 Welcome to our video traffic analysis portal. Here, you can submit your traffic videos for analysis. Follow the steps below to get started:
-1. **Select a Video**: Choose the video you want to analyze by uploading it.""")
+1. **Select a Video**: You can drag and drop or select a video file to upload by clicking the uploader below. Only MP4 format is supported.
+""")
 
 # File uploader for video selection
 uploaded_video = st.file_uploader("Upload your video", type=['mp4'])
@@ -53,7 +52,7 @@ st.markdown("""
 2. **Submit**: Click the submit button to send your video for processing.
 """)
 # Submit button
-if st.button("Submit"):
+if st.button("Submit", key='submit'):
     if uploaded_video is not None:
         st.sidebar.success("Your submission is received!")
         print(uploaded_video.name)
@@ -79,3 +78,9 @@ if st.button("Submit"):
     else:
         st.sidebar.error("Please upload a video and provide a name for your submission.")
 
+st.markdown("""
+3. **Check Status**: Click the button below to check the status of your submission.
+""")
+if st.button("Check Status", key='check_status'):
+    st.write("Redirecting to the job status page...")
+    st.markdown("[Check Status](https://jamar-traffmind-ai.streamlit.app/Job_Status)")
