@@ -36,7 +36,7 @@ st.header("TraffMind AI Job Submission")
 
 st.markdown("""
 Welcome to our video traffic analysis portal. Here, you can submit your traffic videos for analysis. Follow the steps below to get started:
-1️⃣ **Select a Video**: You can drag and drop or select a video file to upload by clicking the uploader below. Only MP4 format is supported.
+1. **Select a Video**: You can drag and drop or select a video file to upload by clicking the uploader below. Only MP4 format is supported.
 """)
 
 # File uploader for video selection
@@ -49,7 +49,7 @@ else:
     st.sidebar.write("Please upload a video to proceed.")
 
 st.markdown("""
-2️⃣ **Submit**: Click the submit button to send your video for processing.
+2. **Submit**: Click the submit button to send your video for processing.
 """)
 # Submit button
 if st.button("Submit", key='submit'):
@@ -79,7 +79,7 @@ if st.button("Submit", key='submit'):
         st.sidebar.error("Please upload a video and provide a name for your submission.")
 
 st.markdown("""
-3️⃣ **Check Status**: 
+3. **Check Status**: 
 """)
 st.page_link("pages/2_Job Status.py" ,label = "Click here to check the status of your submission.",disabled=False)
 
