@@ -38,26 +38,24 @@ def get_s3_status():
     
     # Format the dataframe for unprocessed files
     status_df['LastModified'] = pd.to_datetime(status_df['LastModified'])
-    status_df['Video'] = status_df['Key'].apply(lambda x: x.split('/')[-1])
-    status_df['Video'] = status_df['Video'].apply(lambda x: x.split('.mp4')[0])
+    status_df['Video'] = status_df['Key'].apply(lambda x: x.split('/')[-1].split('.mp4')[0])
     status_df['LastModified'] = status_df['LastModified'] - pd.Timedelta(hours=4)
-    status_df['Submission date'] = status_df['LastModified'].apply(lambda x: x.date())
-    status_df['Submission Time (EST)'] = status_df['LastModified'].apply(lambda x: x.time())
-    status_df['Submission Time (EST)'] = status_df['Submission Time (EST)'].apply(lambda x: x.strftime("%I:%M %p"))
+    status_df['Submission date'] = status_df['LastModified'].dt.date
+    status_df['Submission Time (EST)'] = status_df['LastModified'].dt.time().strftime("%I:%M %p")
     
     # List processed files
     processed_files = s3.list_objects_v2(Bucket="traffmind-client-processed-jamar")
     processed_files = pd.DataFrame(processed_files['Contents'])
     
     # Format the dataframe for processed files
-    processed_files['Video'] = processed_files['Key'].apply(lambda x: x.split('/')[-1])
-    processed_files['Video'] = processed_files['Video'].apply(lambda x: x.split('_median_frame.png')[0])
+    processed_files['Video'] = processed_files['Key'].apply(lambda x: x.split('/')[-1].split('_median_frame.png')[0])
     
     # Determine the status of each Video
-    status_df['Status'] = status_df['Video'].apply(lambda x: 'Finished' if x in list(processed_files['Video']) else 'Processing')
+    status_df['Status'] = status_df['Video'].apply(lambda x: 'Finished' if x in processed_files['Video'].tolist() else 'Processing')
     
     # Arrange and sort the final status dataframe
     status_df = status_df[['Video', 'Submission date', 'Submission Time (EST)', 'Status']]
-    status_df = status_df.sort_values(by=['Submission date', 'Submission Time (EST)'], ascending=False)
+    status_df = status_df.sort_values(by=['Submission date', 'Submission Time (EST)'], ascending=False).reset_index(drop=True)
     
     return status_df
+
