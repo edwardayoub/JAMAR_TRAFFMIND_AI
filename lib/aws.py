@@ -41,7 +41,7 @@ def get_s3_status():
     status_df['Video'] = status_df['Key'].apply(lambda x: x.split('/')[-1].split('.mp4')[0])
     status_df['LastModified'] = status_df['LastModified'] - pd.Timedelta(hours=4)
     status_df['Submission date'] = status_df['LastModified'].dt.date
-    status_df['Submission Time (EST)'] = status_df['LastModified'].dt.time().strftime("%I:%M %p")
+    status_df['Submission Time (EST)'] = status_df['LastModified'].apply(lambda x: x.time().strftime("%I:%M %p"))
     
     # List processed files
     processed_files = s3.list_objects_v2(Bucket="traffmind-client-processed-jamar")
