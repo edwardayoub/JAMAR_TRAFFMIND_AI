@@ -91,6 +91,6 @@ st.markdown("""
 
 st.page_link(
     "pages/1_Step 2: Traffic Tracker.py",
-    label="Job Status Page",
+    label=":blue[Link]",
     disabled=False
 )
