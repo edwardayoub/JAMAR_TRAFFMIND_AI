@@ -41,3 +41,10 @@ if processed_videos:
 else:
     # Display a message indicating that no processed videos are currently available
     st.warning("There are no processed videos available at this time. Please check back later.")
+
+try:
+
+    # Attempt to display the background image
+    st.video(file_name, caption=f"Video for {selected_submission}", format="video/mp4")
+except Exception as e:
+    st.error("The video for this submission is currently unavailable.")
