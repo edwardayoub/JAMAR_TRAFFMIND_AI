@@ -38,8 +38,8 @@ def get_s3_status():
     
     # Format the dataframe for unprocessed files
     status_df['LastModified'] = pd.to_datetime(status_df['LastModified'])
-    status_df['Job'] = status_df['Key'].apply(lambda x: x.split('/')[-1])
-    status_df['Job'] = status_df['Job'].apply(lambda x: x.split('.mp4')[0])
+    status_df['Video'] = status_df['Key'].apply(lambda x: x.split('/')[-1])
+    status_df['Video'] = status_df['Video'].apply(lambda x: x.split('.mp4')[0])
     status_df['LastModified'] = status_df['LastModified'] - pd.Timedelta(hours=4)
     status_df['Submission date'] = status_df['LastModified'].apply(lambda x: x.date())
     status_df['Submission Time (EST)'] = status_df['LastModified'].apply(lambda x: x.time())
@@ -50,14 +50,14 @@ def get_s3_status():
     processed_files = pd.DataFrame(processed_files['Contents'])
     
     # Format the dataframe for processed files
-    processed_files['Job'] = processed_files['Key'].apply(lambda x: x.split('/')[-1])
-    processed_files['Job'] = processed_files['Job'].apply(lambda x: x.split('_median_frame.png')[0])
+    processed_files['Video'] = processed_files['Key'].apply(lambda x: x.split('/')[-1])
+    processed_files['Video'] = processed_files['Video'].apply(lambda x: x.split('_median_frame.png')[0])
     
-    # Determine the status of each job
-    status_df['Status'] = status_df['Job'].apply(lambda x: 'Finished' if x in list(processed_files['Job']) else 'Processing')
+    # Determine the status of each Video
+    status_df['Status'] = status_df['Video'].apply(lambda x: 'Finished' if x in list(processed_files['Video']) else 'Processing')
     
     # Arrange and sort the final status dataframe
-    status_df = status_df[['Job', 'Submission date', 'Submission Time (EST)', 'Status']]
+    status_df = status_df[['Video', 'Submission date', 'Submission Time (EST)', 'Status']]
     status_df = status_df.sort_values(by=['Submission date', 'Submission Time (EST)'], ascending=False)
     
     return status_df
