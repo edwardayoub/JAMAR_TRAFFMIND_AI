@@ -12,14 +12,16 @@ import streamlit
 logger = logging.getLogger(streamlit.__name__)
 
 # read keys in from environment variables
-access_key = os.getenv("AWS_ACCESS_KEY_ID")
-secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 
-region = 'us-east-2'
 
 def start_sagemaker_processing_job(infile,machine_type, environment_variables):
+    access_key = os.getenv("AWS_ACCESS_KEY_ID")
+    secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+    region = 'us-east-2'
+    print(f"Starting sagemaker processing job for {infile}")
     logger.info(f" starting sagemaker processing job for {infile}")
-    VERSION = "1.0.51"
+    VERSION = "1.0.52"
     datetime_str = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
     # Initialize the SageMaker client
