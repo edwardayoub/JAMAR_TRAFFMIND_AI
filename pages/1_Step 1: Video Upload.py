@@ -36,7 +36,7 @@ st.header("TraffMind AI Job Submission")
 
 st.markdown("""
 Welcome to our video traffic analysis portal. Here, you can submit your traffic videos for analysis. Follow the steps below to get started:
-1. **Select a Video**: You can drag and drop or select a video file to upload by clicking the uploader below. Only MP4 format is supported.
+1\. **Select a Video**: You can drag and drop or select a video file to upload by clicking the uploader below. Only MP4 format is supported.
 """)
 
 # File uploader for video selection
@@ -49,7 +49,7 @@ else:
     st.sidebar.write("Please upload a video to proceed.")
 
 st.markdown("""
-2. **Submit**: Click the submit button to send your video for processing.
+2\. **Submit**: Click the submit button to send your video for processing.
 """)
 # Submit button
 if st.button("Submit", key='submit'):
