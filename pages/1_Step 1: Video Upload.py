@@ -78,5 +78,5 @@ if st.button("Submit", key='submit'):
     else:
         st.sidebar.error("Please upload a video and provide a name for your submission.")
 
-st.page_link("pages/2_Job Status.py" ,label = "**Check Status**: Click here to check the status of your submission.",icon="3. ", disabled=False)
+st.page_link("pages/2_Job Status.py" ,label = "**Check Status**: Click here to check the status of your submission.",icon="3\. ", disabled=False)
 
