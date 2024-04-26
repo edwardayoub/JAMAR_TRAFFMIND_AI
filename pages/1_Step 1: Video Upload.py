@@ -85,7 +85,12 @@ if st.button("Submit", key='submit'):
         st.sidebar.error("Please upload a video and provide a name for your submission.")
 
 # Step 3: Check Status
-st.markdown(
-    "<a href='https://jamar-traffmind-ai.streamlit.app/Job_Status' target='_self'>**3. Check Status**: Click here to check the status of your submission.</a>",
-    unsafe_allow_html=True
+st.markdown("""
+**3. Check Status**: Click the following link to check the status of your submission.
+""")
+
+st.page_link(
+    "pages/1_Step 2: Traffic Tracker.py",
+    label="Job Status Page",
+    disabled=False
 )
