@@ -36,7 +36,7 @@ st.header("TraffMind AI Job Submission")
 
 # Step 1: Select a video
 st.markdown("""
-**1. Select a Video**: You can drag and drop or select a video file to upload by clicking the uploader below. Only MP4 format is supported.
+**1. Select a Video**: You can drag and drop or select a video file to upload by clicking the uploader below. Only MP4 and h264 formats are supported.
 """)
 
 # File uploader for video selection
