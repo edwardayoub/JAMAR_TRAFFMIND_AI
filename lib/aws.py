@@ -33,31 +33,34 @@ def get_s3_status():
     s3 = boto3.client("s3", region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
     
     # List unprocessed files
-    unprocessed_files = s3.list_objects_v2(Bucket="traffmind-client-unprocessed-jamar")
-    status_df = pd.DataFrame(unprocessed_files['Contents'])
-    
-    # Format the dataframe for unprocessed files
-    status_df['LastModified'] = pd.to_datetime(status_df['LastModified'])
-    status_df['Video'] = status_df['Key'].apply(lambda x: x.split('/')[-1].split('.mp4')[0])
-    status_df['LastModified'] = status_df['LastModified'] - pd.Timedelta(hours=4)
-    status_df['Submission date'] = status_df['LastModified'].dt.date
-    status_df['Submission Time (EST)'] = status_df['LastModified'].apply(lambda x: x.time().strftime("%I:%M %p"))
-    
+    unprocessed_response = s3.list_objects_v2(Bucket="traffmind-client-unprocessed-jamar")
+    if 'Contents' in unprocessed_response:
+        unprocessed_files = pd.DataFrame(unprocessed_response['Contents'])
+        unprocessed_files['LastModified'] = pd.to_datetime(unprocessed_files['LastModified'])
+        unprocessed_files['Video'] = unprocessed_files['Key'].apply(lambda x: x.split('/')[-1].split('.mp4')[0])
+        unprocessed_files['LastModified'] = unprocessed_files['LastModified'] - pd.Timedelta(hours=4)
+        unprocessed_files['Submission date'] = unprocessed_files['LastModified'].dt.date
+        unprocessed_files['Submission Time (EST)'] = unprocessed_files['LastModified'].apply(lambda x: x.time().strftime("%I:%M %p"))
+    else:
+        unprocessed_files = pd.DataFrame(columns=['Key', 'LastModified', 'Video', 'Submission date', 'Submission Time (EST)'])
+
     # List processed files
-    processed_files = s3.list_objects_v2(Bucket="traffmind-client-processed-jamar")
-    processed_files = pd.DataFrame(processed_files['Contents'])
-    
-    # Format the dataframe for processed files
-    processed_files['Video'] = processed_files['Key'].apply(lambda x: x.split('/')[-1].split('_median_frame.png')[0])
-    
+    processed_response = s3.list_objects_v2(Bucket="traffmind-client-processed-jamar")
+    if 'Contents' in processed_response:
+        processed_files = pd.DataFrame(processed_response['Contents'])
+        processed_files['Video'] = processed_files['Key'].apply(lambda x: x.split('/')[-1].split('_median_frame.png')[0])
+    else:
+        processed_files = pd.DataFrame(columns=['Key', 'Video'])
+
     # Determine the status of each Video
-    status_df['Status'] = status_df['Video'].apply(lambda x: 'Finished' if x in processed_files['Video'].tolist() else 'Processing')
+    unprocessed_files['Status'] = unprocessed_files['Video'].apply(lambda x: 'Finished' if x in processed_files['Video'].tolist() else 'Processing')
     
     # Arrange and sort the final status dataframe
-    status_df = status_df[['Video', 'Submission date', 'Submission Time (EST)', 'Status']]
+    status_df = unprocessed_files[['Video', 'Submission date', 'Submission Time (EST)', 'Status']]
     status_df = status_df.sort_values(by=['Submission date', 'Submission Time (EST)'], ascending=False).reset_index(drop=True)
     
     return status_df
+
 
 import boto3
 from botocore.exceptions import ClientError
