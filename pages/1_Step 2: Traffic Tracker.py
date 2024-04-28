@@ -35,7 +35,6 @@ if processed_videos:
         with open(file_name, "rb") as file:
             print(f'reading file {file_name}')
             file_bytes = file.read()
-
         st.download_button(label="Click here to download the processed video", data=file_bytes, file_name=selected_submission)
 
 else:
