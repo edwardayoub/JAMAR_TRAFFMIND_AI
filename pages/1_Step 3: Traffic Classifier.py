@@ -15,6 +15,3 @@ The **TraffMind AI Traffic Classifier** is designed to enhance traffic managemen
 ### Coming Soon!
 This feature is under development and will be available soon. It aims to provide unparalleled accuracy in vehicle classification, helping urban planners, traffic management teams, and researchers gain deeper insights into traffic flow dynamics.
 """)
-
-st.sidebar.header("More Information")
-st.sidebar.info("The TraffMind AI Traffic Classifier is currently in development. Stay tuned for updates on this feature.")
