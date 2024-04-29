@@ -1,12 +1,11 @@
 import streamlit as st
-from lib import list_files, generate_presigned_url
+from lib import get_s3_status
+def show_table_with_links(df):
+    # Convert DataFrame to HTML, replacing text URL with an HTML link
+    df['Download Link'] = df['Download Link'].apply(lambda x: f'<a href="{x}" target="_blank">Download</a>' if x is not None else "")
+    st.write(df.to_html(escape=False, index=False), unsafe_allow_html=True)
 
 st.set_page_config(layout="wide")
-
-bucket = "traffmind-client-processed-jamar"
-
-# Example list of processed videos
-processed_videos = list_files(bucket, '*', 'mp4')  # Update this with actual processed videos once available
 
 st.title("Traffic Tracker Processed Videos")
 
@@ -17,20 +16,20 @@ Experience our Traffic Tracker's capabilities firsthand. This feature automatica
 2. **View Processed Video**: Click the link provided to directly download the video from the storage service.
 """)
 
-# Side panel for submission selection
-with st.sidebar:
-    st.header("Select Your Submission")
-    selected_submission = st.selectbox("Previous Submissions", options=processed_videos)
-
 # Main panel for displaying download link
 st.header("Processed Video with Traffic Tracker")
 
-# Check if there are videos
-if processed_videos:
-    if selected_submission:
-        # Generate a pre-signed URL for the selected video
-        url = generate_presigned_url(bucket, selected_submission)
-        # Display a link for the user to download the video directly
-        st.markdown(f"[Download Processed Video]({url})", unsafe_allow_html=True)
-else:
-    st.warning("There are no processed videos available at this time. Please check back later.")
+refresh = st.button('Refresh Data')
+
+# Manage initial load and refresh with session state
+if 'first_load' not in st.session_state:
+    st.session_state['first_load'] = True
+
+# Auto-refresh on the initial load or when the refresh button is pressed
+if st.session_state['first_load'] or refresh:
+    # Fetch data
+    data_df = get_s3_status()
+    # Display data
+    show_table_with_links(data_df)
+    st.session_state['first_load'] = False
+
