@@ -42,12 +42,6 @@ st.markdown("""
 # File uploader for video selection
 uploaded_video = st.file_uploader("Upload your video", type=['mp4', 'h264'])
 
-if uploaded_video is not None:
-    # Display the name of the uploaded file
-    st.sidebar.write("Selected Video: ", uploaded_video.name)
-else:
-    st.sidebar.write("Please upload a video to proceed.")
-
 # Step 2: Submit
 st.markdown("""
 **2. Submit**: Click the submit button to send your video for processing.
