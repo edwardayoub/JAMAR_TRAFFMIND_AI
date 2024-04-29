@@ -17,19 +17,19 @@ st.title("TraffMind AI Background Detector")
 # Introduction and user guidance
 st.markdown("""
 Explore the power of our background detection technology. This feature allows you to see the extracted background from your previously submitted videos. Here’s how to view your backgrounds:
+""")
+st.markdown("""
 1. **Select Your Submission**: Use the dropdown menu in the side panel to select one of your previous submissions.
-2. **View the Background**: The extracted background image from your selected video will be displayed in the main panel.
 """)
 
-# Side panel for selection
-with st.sidebar:
-    st.header("Select Your Submission")
-    # The keys of the dictionary are the submission names.
-    selected_submission = st.selectbox("Previous Submissions", options=background_images)
+selected_submission = st.selectbox("Previous Submissions", options=background_images)
 
 # Main panel for displaying the background image
 st.header("Extracted Background Image")
 
+st.markdown("""
+2. **View the Background**: The extracted background image from your selected video will be displayed in the main panel.
+""")
 
 # if video selected, display download button, if clicked, download the video
 if background_images:
