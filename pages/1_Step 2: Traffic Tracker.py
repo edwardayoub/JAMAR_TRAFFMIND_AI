@@ -11,7 +11,9 @@ st.header("TraffMind AI Traffic Tracker")
 
 st.markdown("""
 Experience our Traffic Tracker's capabilities firsthand. This feature automatically identifies and tracks vehicles with bounding boxes, enhancing traffic video analysis. Follow the steps below to view and download your processed videos:
+
 **1. Refresh Data**: Click the button below to refresh the list of processed videos.
+
 **2. Download Video**: After refreshing, use the main panel to download your processed videos.
 """)
 
