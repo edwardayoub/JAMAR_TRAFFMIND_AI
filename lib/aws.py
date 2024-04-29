@@ -1,6 +1,8 @@
 import boto3
 import os
 import pandas as pd
+from pytz import timezone
+import hashlib
 
 # read keys in from environment variables
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
@@ -29,37 +31,40 @@ def list_files(bucket_name, prefix, file_type='*'):
     return files
 
 def get_s3_status():
-    # Initialize S3 client with provided credentials
+
+    # Initialize SageMaker client
+    sm = boto3.client("sagemaker", region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
+    jobs = sm.list_processing_jobs()  # List SageMaker processing jobs
+    jobs_df = pd.DataFrame(jobs['ProcessingJobSummaries'])
+    jobs_df['hash_name'] = jobs_df['ProcessingJobName'].apply(lambda x: x.split('-')[1])
+    jobs_df['CreationTime'] = pd.to_datetime(jobs_df['CreationTime'], utc=True)
+    jobs_df['ProcessingEndTime'] = pd.to_datetime(jobs_df['ProcessingEndTime'], utc=True)
+    jobs_df['LastModifiedTime'] = pd.to_datetime(jobs_df['LastModifiedTime'], utc=True)
+
+    # Initialize S3 client
     s3 = boto3.client("s3", region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
-    
-    # List unprocessed files
-    unprocessed_response = s3.list_objects_v2(Bucket="traffmind-client-unprocessed-jamar")
-    if 'Contents' in unprocessed_response:
-        unprocessed_files = pd.DataFrame(unprocessed_response['Contents'])
-        unprocessed_files['LastModified'] = pd.to_datetime(unprocessed_files['LastModified'])
-        unprocessed_files['Video'] = unprocessed_files['Key'].apply(lambda x: x.split('/')[-1].split('.mp4')[0])
-        unprocessed_files['LastModified'] = unprocessed_files['LastModified'] - pd.Timedelta(hours=4)
-        unprocessed_files['Submission date'] = unprocessed_files['LastModified'].dt.date
-        unprocessed_files['Submission Time (EST)'] = unprocessed_files['LastModified'].apply(lambda x: x.time().strftime("%I:%M %p"))
-    else:
-        unprocessed_files = pd.DataFrame(columns=['Key', 'LastModified', 'Video', 'Submission date', 'Submission Time (EST)'])
+    unprocessed_files = s3.list_objects_v2(Bucket="traffmind-client-unprocessed-jamar")
+    status_df = pd.DataFrame(unprocessed_files['Contents'])
+    status_df['hash_name'] = status_df['Key'].apply(lambda x: hashlib.md5(x.encode()).hexdigest())
+    status_df['LastModified'] = pd.to_datetime(status_df['LastModified'], utc=True)
 
-    # List processed files
-    processed_response = s3.list_objects_v2(Bucket="traffmind-client-processed-jamar")
-    if 'Contents' in processed_response:
-        processed_files = pd.DataFrame(processed_response['Contents'])
-        processed_files['Video'] = processed_files['Key'].apply(lambda x: x.split('/')[-1].split('_median_frame.png')[0])
-    else:
-        processed_files = pd.DataFrame(columns=['Key', 'Video'])
+    # Merge DataFrames on hash_name
+    merged_df = pd.merge(status_df, jobs_df, on='hash_name', how='left')
+    time_difference = merged_df['LastModified'] - merged_df['CreationTime']
+    merged_df = merged_df[time_difference.abs() <= pd.Timedelta(minutes=5)]
 
-    # Determine the status of each Video
-    unprocessed_files['Status'] = unprocessed_files['Video'].apply(lambda x: 'Finished' if x in processed_files['Video'].tolist() else 'Processing')
+    # Calculate processing duration in hours and format datetime fields for EST
+    merged_df['Duration (hrs)'] = ((merged_df['ProcessingEndTime'] - merged_df['CreationTime']).dt.total_seconds() / 3600).round(1)
+    est = timezone('America/New_York')
+    merged_df['CreationTime'] = merged_df['CreationTime'].dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
+    merged_df['ProcessingEndTime'] = merged_df['ProcessingEndTime'].dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
+
+    # Rename columns and filter necessary fields
+    merged_df = merged_df.rename(columns={'Key': 'File Name', 'CreationTime': 'Start Time', 'ProcessingEndTime': 'End Time', 'ProcessingJobStatus': 'Status'})
+    merged_df = merged_df[['File Name', 'Start Time', 'End Time', 'Duration (hrs)', 'Status']]
+    merged_df.reset_index(drop=True, inplace=True)
     
-    # Arrange and sort the final status dataframe
-    status_df = unprocessed_files[['Video', 'Submission date', 'Submission Time (EST)', 'Status']]
-    status_df = status_df.sort_values(by=['Submission date', 'Submission Time (EST)'], ascending=False).reset_index(drop=True)
-    
-    return status_df
+    return merged_df
 
 
 import boto3
