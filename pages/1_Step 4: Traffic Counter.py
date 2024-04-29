@@ -15,6 +15,3 @@ The **TraffMind AI Traffic Counter** is our next-generation tool tailored for ac
 ### Coming Soon!
 We are excited to bring you this advanced feature. The TraffMind AI Traffic Counter is in the final stages of development and will soon help transform how traffic data is understood and utilized.
 """)
-
-st.sidebar.header("Further Details")
-st.sidebar.info("The TraffMind AI Traffic Counter is nearly ready for release. Keep an eye on this page for the official launch date!")
