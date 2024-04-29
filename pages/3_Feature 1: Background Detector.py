@@ -12,8 +12,6 @@ bucket = "traffmind-client-processed-jamar"
 # Example list of processed videos - this list is empty to simulate the current situation
 background_images = list_files(bucket, '*', 'png')  # Update this with actual processed videos once available
 
-st.title("TraffMind AI Background Detector")
-
 # Introduction and user guidance
 st.markdown("""
 Explore the power of our background detection technology. This feature allows you to see the extracted background from your previously submitted videos. Here’s how to view your backgrounds:
