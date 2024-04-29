@@ -11,4 +11,7 @@ st.title("TraffMind AI Obstacle Detector")
 # Introduction and user guidance
 st.markdown("""
 Discover the capabilities of our obstacle detection technology. This advanced feature automatically identifies obstacles in the camera's view, significantly improving the quality of video processing for traffic analysis. Coming soon!
+
+### Coming Soon!
+This feature is under development and will be available soon. 
 """)
