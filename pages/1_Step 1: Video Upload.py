@@ -50,7 +50,7 @@ st.markdown("""
 # Submit button
 if st.button("Submit", key='submit'):
     if uploaded_video is not None:
-        send_discord_notification()
+        send_discord_notification(uploaded_video.name, uploaded_video.size / (1024 * 1024))
         st.sidebar.success("Your submission is received!")
         print(uploaded_video.name)
 
