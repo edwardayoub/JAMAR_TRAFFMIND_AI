@@ -117,11 +117,22 @@ def generate_presigned_url(bucket_name, object_name, expiration=3600):
 
     return response
 
-def send_discord_notification():
-    webhook_url = discord_webhook_url
+def send_discord_notification(file_name, file_size_mb):
+    webhook_url = discord_webhook_url  # Make sure to define your Discord webhook URL
     data = {
-        "content": "A video has been submitted!",
-        "username": "Streamlit App Bot"
+        "embeds": [{
+            "title": "New Video Submission",
+            "description": "A video has been submitted to the server!",
+            "color": 5814783,
+            "fields": [
+                {"name": "File Name", "value": file_name, "inline": False},
+                {"name": "Size", "value": f"{file_size_mb:.2f} MB", "inline": False}
+            ],
+            "footer": {
+                "text": "Streamlit App Notification"
+            }
+        }],
+        "username": "TraffMind AI"
     }
     response = requests.post(
         webhook_url, data=json.dumps(data),
