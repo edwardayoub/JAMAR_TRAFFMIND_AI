@@ -117,7 +117,7 @@ def generate_presigned_url(bucket_name, object_name, expiration=3600):
 
     return response
 
-def send_discord_notification(message):
+def send_discord_notification():
     webhook_url = webhook_url
     data = {
         "content": "A video has been submitted!",
