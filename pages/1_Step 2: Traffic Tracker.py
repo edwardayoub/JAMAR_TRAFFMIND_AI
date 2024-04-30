@@ -26,7 +26,10 @@ if 'first_load' not in st.session_state:
 
 # Auto-refresh on the initial load or when the refresh button is pressed
 if 'first_load' not in st.session_state or refresh:
-    data_df = get_s3_status()
-    # Display data
-    show_table_with_links(data_df)
-    st.session_state['first_load'] = False
+    try:
+        data_df = get_s3_status()
+        show_table_with_links(data_df)
+        st.session_state['first_load'] = False
+    except Exception as e:
+        st.error(f"No jobs have been submitted yet. Please submit a job to view processed videos.")
+        st.stop()
