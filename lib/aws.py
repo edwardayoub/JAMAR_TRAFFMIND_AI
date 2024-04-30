@@ -3,10 +3,13 @@ import os
 import pandas as pd
 from pytz import timezone
 import hashlib
+import requests
+import json
 
 # read keys in from environment variables
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
 secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+webhook_url = os.getenv("WEBHOOK_URL")
 
 region = 'us-east-2'
 
@@ -113,3 +116,16 @@ def generate_presigned_url(bucket_name, object_name, expiration=3600):
         return None
 
     return response
+
+def send_discord_notification(message):
+    webhook_url = webhook_url
+    data = {
+        "content": "A video has been submitted!",
+        "username": "Streamlit App Bot"
+    }
+    response = requests.post(
+        webhook_url, data=json.dumps(data),
+        headers={'Content-Type': 'application/json'}
+    )
+    if response.status_code != 204:
+        raise Exception(f"Request to discord returned an error {response.status_code}, the response is:\n{response.text}")
