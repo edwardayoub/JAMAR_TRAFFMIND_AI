@@ -47,9 +47,10 @@ def app():
     st.set_page_config(page_title="Keras Prediction Interface", layout="wide")
     
     st.header("TraffMind AI Weather Detector")
-    
+    st.subheader("Beta 1 - Use images with visible sky for better accuracy")
+
     st.markdown("""
-    **Welcome to the TraffMind AI Image Classifier!** This tool uses advanced neural networks to predict weather conditions from images. Follow the steps below to upload your image and receive predictions:
+    **Welcome to the TraffMind AI Image Classifier!** This tool uses advanced neural networks to predict weather conditions from images. For best accuracy, please use images that include a portion of the sky. Follow the steps below to upload your image and receive predictions:
     """)
     
     # Step 1: Upload Image
@@ -67,13 +68,13 @@ def app():
             image = Image.open(uploaded_file)
             st.write("Identifying...")
             preprocessed_image = preprocess_image_for_prediction(image)
-            model_path = "./model/traffmind_weather_beta1.h5"
+            model_path = "./model/trainedModelE10.h5"
             loaded_model = tf.keras.models.load_model(model_path)
             predictions = loaded_model.predict(preprocessed_image)
             classes = ['Cloudy', 'Sunny', 'Rainy', 'Snowy', 'Foggy']
             prediction = classes[np.argmax(predictions)]
             st.write('Prediction: %s' % (prediction))
-            st.image(image, caption='Uploaded Image.', use_column_width=True)
+            st.image(image, caption='Uploaded Image.', use_column_width=False)
 
     # Step 3: Results
     st.markdown("""
