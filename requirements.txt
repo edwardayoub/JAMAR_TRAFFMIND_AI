@@ -1,2 +1,6 @@
 boto3
 pandas
+tensorflow
+Pillow
+numpy
+opencv-python
