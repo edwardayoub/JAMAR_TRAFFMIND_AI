@@ -65,6 +65,10 @@ def app():
         **2. Identify and Predict**: Click 'Identify' to process and predict the weather condition in your image.
         """)
         if st.button('Identify', key='identify'):
+            # Step 3: Results
+            st.markdown("""
+            **3. Results**: View the image and its predicted condition below.
+            """)
             image = Image.open(uploaded_file)
             st.write("Identifying...")
             preprocessed_image = preprocess_image_for_prediction(image)
@@ -76,10 +80,6 @@ def app():
             st.write('Prediction: %s' % (prediction))
             st.image(image, caption='Uploaded Image.', use_column_width=False)
 
-    # Step 3: Results
-    st.markdown("""
-    **3. Results**: View the image and its predicted condition below.
-    """)
 
 if __name__=='__main__':
     app()
