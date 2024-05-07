@@ -13,8 +13,11 @@ def preprocess_image_for_prediction(image):
     wpercent = (base_height / float(image.size[1]))
     wsize = int((float(image.size[0]) * float(wpercent)))
     image = image.resize((wsize, base_height), Image.Resampling.LANCZOS)
-    return image
-
+    image = ImageOps.invert(image)
+    image = image.resize((100, 100), Image.Resampling.LANCZOS)
+    img_array = np.array(image) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
 
 def app():
     st.set_page_config(page_title="Vehicle Classification Interface", layout="wide")
