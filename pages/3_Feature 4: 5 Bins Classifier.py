@@ -9,13 +9,23 @@ import PIL.ImageOps
 from PIL import Image
 
 # Function to preprocess the image for the model
-def prepare_image(image):
-    img = image.resize((100, 100), Image.LANCZOS)  # Resize like the training images
-    img = PIL.ImageOps.invert(img)
-    img = image_utils.img_to_array(img)
-    img = img / 255.0  # Normalize the image
-    img = img.reshape(1, 100, 100, 3)  # Reshape for the model (batch_size, height, width, channels)
-    return img
+def preprocess_image_for_prediction(image):
+    # Resize the image to a fixed height of 400 pixels
+    fixed_height = 400
+    wpercent = (fixed_height / float(image.size[1]))
+    wsize = int((float(image.size[0]) * float(wpercent)))
+    image = image.resize((wsize, fixed_height), Image.Resampling.LANCZOS)
+    
+    # Invert the image colors
+    image = ImageOps.invert(image)
+    
+    # Resize the image to the target size of 100x100
+    image = image.resize((100, 100), Image.Resampling.LANCZOS)
+    
+    # Convert the image to a numpy array and normalize it
+    img_array = np.array(image) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
     
 def app():
     st.set_page_config(page_title="Vehicle Classification Interface", layout="wide")
@@ -45,7 +55,7 @@ def app():
             """)
             st.write("Classifying...")
             image = Image.open(uploaded_file)
-            preprocessed_image = prepare_image(image)
+            preprocessed_image = preprocess_image_for_prediction(image)
             model_path = "./model/traffmind_weather_beta1.h5"
             loaded_model = tf.keras.models.load_model(model_path)
             predictions = loaded_model.predict(preprocessed_image)
