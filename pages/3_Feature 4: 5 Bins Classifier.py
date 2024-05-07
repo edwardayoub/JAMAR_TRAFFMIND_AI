@@ -1,6 +1,7 @@
 import os
 import streamlit as st 
-from PIL import Image, ImageOps
+import PIL.ImageOps
+from PIL import Image
 import numpy as np
 import tensorflow as tf
 import cv2
