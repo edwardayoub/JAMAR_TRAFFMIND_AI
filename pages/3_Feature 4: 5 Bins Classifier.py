@@ -9,21 +9,10 @@ from tensorflow.keras.preprocessing import image as image_utils
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
-    # Resize the image to a fixed height of 400 pixels
-    fixed_height = 400
-    wpercent = (fixed_height / float(image.size[1]))
+    base_height = 400
+    wpercent = (base_height / float(image.size[1]))
     wsize = int((float(image.size[0]) * float(wpercent)))
-    image = image.resize((wsize, fixed_height), Image.Resampling.LANCZOS)
-    
-    # Invert the image colors
-    image = ImageOps.invert(image)
-    
-    # Resize the image to the target size of 100x100
-    image = image.resize((100, 100), Image.Resampling.LANCZOS)
-    
-    # Convert the image to a numpy array and normalize it
-    img_array = np.array(image) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    image = image.resize((wsize, base_height), Image.Resampling.LANCZOS)
     return img_array
 
 
