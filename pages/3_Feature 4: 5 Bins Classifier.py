@@ -5,6 +5,7 @@ import numpy as np
 from io import BytesIO
 import tensorflow as tf
 import cv2
+from tensorflow.keras.preprocessing import image as image_utils
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
