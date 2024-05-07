@@ -4,10 +4,10 @@ from PIL import Image, ImageOps
 import numpy as np
 import tensorflow as tf
 import cv2
-import PIL.ImageOps
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
+    image = image.resize((100, 100), Image.LANCZOS)  # Resize like the training images
     image = PIL.ImageOps.invert(image)
     img_array = np.array(image) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
