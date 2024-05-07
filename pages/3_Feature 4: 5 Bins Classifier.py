@@ -7,6 +7,8 @@ import tensorflow as tf
 import cv2
 
 # Function to preprocess the image for the model
+def preprocess_image_for_prediction(image):
+    # Resize the image to 100x100 as used in training
     image = image.resize((100, 100), Image.Resampling.LANCZOS)
     # Invert the colors of the image to match training preprocessing
     image = ImageOps.invert(image)
@@ -15,6 +17,7 @@ import cv2
     img_array = img_array / 255.0  # Normalize the image array to 0-1 range
     img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
     return img_array
+
 
 def app():
     st.set_page_config(page_title="Vehicle Classification Interface", layout="wide")
