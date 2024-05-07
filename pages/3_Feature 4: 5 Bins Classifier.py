@@ -49,7 +49,7 @@ def app():
             image = Image.open(uploaded_file)
             st.write("Classifying...")
             preprocessed_image = preprocess_image_for_prediction(image)
-            model_path = "./model/vehicle_classifier.h5"
+            model_path = "./model/traffmind_weather_beta1.h5"
             loaded_model = tf.keras.models.load_model(model_path)
             predictions = loaded_model.predict(preprocessed_image)
             classes = ['Passenger Vehicles', 'Light Trucks', 'Buses', 'Single Unit Vehicles', 'Combination Units']
