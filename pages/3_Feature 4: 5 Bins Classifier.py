@@ -13,7 +13,7 @@ def preprocess_image_for_prediction(image):
     wpercent = (base_height / float(image.size[1]))
     wsize = int((float(image.size[0]) * float(wpercent)))
     image = image.resize((wsize, base_height), Image.Resampling.LANCZOS)
-    return img_array
+    return image
 
 
 def app():
