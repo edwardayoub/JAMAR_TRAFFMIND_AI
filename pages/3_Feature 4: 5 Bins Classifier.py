@@ -1,11 +1,12 @@
 import os
 import streamlit as st 
-from PIL import Image, ImageOps
 import numpy as np
 from io import BytesIO
 import tensorflow as tf
 import cv2
-from tensorflow.keras.preprocessing import image as image_utils
+from keras.preprocessing import image as image_utils
+import PIL.ImageOps
+from PIL import Image
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
