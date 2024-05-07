@@ -9,9 +9,11 @@ from tensorflow.keras.preprocessing import image as image_utils
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
-    image = image.resize((100, 100), Image.Resampling.LANCZOS)
-    img_array = np.array(image) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    image = image.resize((100, 100), Image.LANCZOS)  # Resize like the training images
+    image = PIL.ImageOps.invert(image)
+    img_array = image_utils.img_to_array(image)
+    img_array = img_array / 255.0  # Normalize the image
+    img_array = img_array.reshape(1, 100, 100, 3)  # Reshape for the model (batch_size, height, width, channels)
     return img_array
 
 def app():
