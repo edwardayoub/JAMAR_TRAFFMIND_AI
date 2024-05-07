@@ -9,14 +9,15 @@ import PIL.ImageOps
 from PIL import Image
 
 # Function to preprocess the image for the model
-def preprocess_image_for_prediction(image):
-    image = image.resize((100, 100), Image.LANCZOS)  # Resize like the training images
-    image = PIL.ImageOps.invert(image)
-    img_array = image_utils.img_to_array(image)
-    img_array = img_array / 255.0  # Normalize the image
-    img_array = img_array.reshape(1, 100, 100, 3)  # Reshape for the model (batch_size, height, width, channels)
-    return img_array
-
+def prepare_image(image_path):
+    img = Image.open(image_path)
+    img = img.resize((100, 100), Image.LANCZOS)  # Resize like the training images
+    img = PIL.ImageOps.invert(img)
+    img = image_utils.img_to_array(img)
+    img = img / 255.0  # Normalize the image
+    img = img.reshape(1, 100, 100, 3)  # Reshape for the model (batch_size, height, width, channels)
+    return img
+    
 def app():
     st.set_page_config(page_title="Vehicle Classification Interface", layout="wide")
     
@@ -43,9 +44,8 @@ def app():
             st.markdown("""
             **3. Results**: View the image and its classified vehicle type below.
             """)
-            image = Image.open(uploaded_file)
             st.write("Classifying...")
-            preprocessed_image = preprocess_image_for_prediction(image)
+            preprocessed_image = prepare_image(uploaded_file)
             model_path = "./model/traffmind_weather_beta1.h5"
             loaded_model = tf.keras.models.load_model(model_path)
             predictions = loaded_model.predict(preprocessed_image)
