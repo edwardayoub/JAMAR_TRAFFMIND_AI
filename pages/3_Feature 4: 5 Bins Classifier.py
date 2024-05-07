@@ -4,6 +4,7 @@ from PIL import Image, ImageOps
 import numpy as np
 import tensorflow as tf
 import cv2
+import PIL.ImageOps
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
