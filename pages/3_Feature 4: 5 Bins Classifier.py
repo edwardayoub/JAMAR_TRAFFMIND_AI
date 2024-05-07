@@ -7,11 +7,7 @@ import cv2
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
-    
-    # Resize the image to the target size of 100x100
-    image = image.resize((100, 100), Image.Resampling.LANCZOS)
-    
-    # Convert the image to a numpy array and normalize it
+    image = PIL.ImageOps.invert(image)
     img_array = np.array(image) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
