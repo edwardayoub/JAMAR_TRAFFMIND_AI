@@ -8,7 +8,7 @@ st.header("TraffMind AI Traffic Classifier")
 # Description of the Traffic Classifier
 st.markdown("""
 The **TraffMind AI Traffic Classifier** is designed to enhance traffic management and analysis by classifying vehicles into distinct categories. This powerful tool can categorize vehicles into:
-- **6 bins**: For basic classification needs, such as distinguishing between cars, vans, trucks, buses, motorcycles, and bicycles.
+- **6 bins**: For basic classification needs, such as distinguishing between motorcycles, cars, vans/light trucks, buses, single unit trucks, and combination trucks.
 - **13 bins**: For more detailed analysis, providing finer distinctions among vehicle types.
 - **Custom classifications**: Tailored to meet specific requirements, allowing for unique categorizations based on user-defined criteria.
 
