@@ -99,8 +99,14 @@ def app():
     st.subheader("Detect vehicles in uploaded images using advanced neural networks")
 
     st.markdown("""
-    **Instructions:** Upload an image and the system will detect vehicles and highlight them.
+    **Welcome to the Vehicle Detection System!** This tool leverages advanced neural networks to identify and classify various types of vehicles in images. Follow the steps below to upload your image and see the detection in action:
     """)
+    
+    st.markdown("""
+    **1. Upload Image**: Drag and drop or select an image file to start the vehicle detection process. Supported formats: JPEG, PNG.
+    """)
+
+    
     # add text desciptions for bins and colored
     st.markdown(f"""
         <div style="background-color:black; padding:10px;">
@@ -118,8 +124,13 @@ def app():
     
     # Detect and Display
     if uploaded_file is not None:
-        st.markdown("**Detection Results:**")
+        st.markdown("""
+        **2. Detect and Classify**: Click 'Detect' to process your image and highlight the vehicles based on the type.
+        """)
         if st.button('Detect', key='detect'):
+            st.markdown("""
+            **3. Results**: View the image with detected vehicles, color-coded by type, shown below.
+            """)
             image = Image.open(uploaded_file)
             processed_image = detect_objects_and_draw(image)
             st.image(processed_image, caption='Detected Vehicles', use_column_width=True)
