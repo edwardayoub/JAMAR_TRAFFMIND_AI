@@ -36,7 +36,7 @@ def list_files(bucket_name, prefix, file_type='*'):
 def get_s3_status():
     # Initialize SageMaker client
     sm = boto3.client("sagemaker", region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
-    jobs = sm.list_processing_jobs()  # List SageMaker processing jobs
+    jobs = sm.list_processing_jobs(MaxResults=100)  # List SageMaker processing jobs
     jobs_df = pd.DataFrame(jobs['ProcessingJobSummaries'])
     jobs_df['hash_name'] = jobs_df['ProcessingJobName'].apply(lambda x: x.split('-')[1])
     jobs_df['CreationTime'] = pd.to_datetime(jobs_df['CreationTime'], utc=True)
