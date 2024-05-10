@@ -44,7 +44,7 @@ def preprocess_image_for_prediction(image):
 
     return img_array
 def app():
-    st.set_page_config(page_title="Keras Prediction Interface", layout="wide")
+    st.set_page_config(page_title="TraffMind AI Weather Detector", layout="wide")
     
     st.header("TraffMind AI Weather Detector")
     st.subheader("Beta 1 - Use images with visible sky for better accuracy")
