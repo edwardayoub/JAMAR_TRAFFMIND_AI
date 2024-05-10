@@ -72,26 +72,30 @@ def get_s3_status():
     except KeyError:
         processed_files_df = pd.DataFrame(columns=['Key', 'file_path'])
     
-    # Merge DataFrames on hash_name
-    merged_df = pd.merge(status_df, jobs_df, on='hash_name', how='left')
-    time_difference = merged_df['LastModified'] - merged_df['CreationTime']
-    merged_df = merged_df[time_difference.abs() <= pd.Timedelta(minutes=5)]
+    try:
+        # Merge DataFrames on hash_name
+        merged_df = pd.merge(status_df, jobs_df, on='hash_name', how='left')
+        time_difference = merged_df['LastModified'] - merged_df['CreationTime']
+        merged_df = merged_df[time_difference.abs() <= pd.Timedelta(minutes=5)]
 
-    # Calculate processing duration in hours and format datetime fields for EST
-    merged_df['Duration (hrs)'] = ((merged_df['ProcessingEndTime'] - merged_df['CreationTime']).dt.total_seconds() / 3600).round(1)
-    est = timezone('America/New_York')
-    merged_df['CreationTime'] = merged_df['CreationTime'].dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
-    merged_df['ProcessingEndTime'] = merged_df['ProcessingEndTime'].dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
-    # merged_df['Key'] = merged_df['Key'].str.replace('.mp4', '', regex=False)
-    # merged_df['Key'] = merged_df['Key'].str.replace('.h264', '', regex=False)
-    merged_df = pd.merge(merged_df, processed_files_df, on='Key', how='left')
-    # add download link if Status is Completed
-    merged_df['Download Link'] = merged_df.apply(lambda x: generate_presigned_url("traffmind-client-processed-jamar", x['file_path']) if x['ProcessingJobStatus'] == 'Completed' else None, axis=1)
+        # Calculate processing duration in hours and format datetime fields for EST
+        merged_df['Duration (hrs)'] = ((merged_df['ProcessingEndTime'] - merged_df['CreationTime']).dt.total_seconds() / 3600).round(1)
+        est = timezone('America/New_York')
+        merged_df['CreationTime'] = merged_df['CreationTime'].dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
+        merged_df['ProcessingEndTime'] = merged_df['ProcessingEndTime'].dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
+        # merged_df['Key'] = merged_df['Key'].str.replace('.mp4', '', regex=False)
+        # merged_df['Key'] = merged_df['Key'].str.replace('.h264', '', regex=False)
+        merged_df = pd.merge(merged_df, processed_files_df, on='Key', how='left')
+        # add download link if Status is Completed
+        merged_df['Download Link'] = merged_df.apply(lambda x: generate_presigned_url("traffmind-client-processed-jamar", x['file_path']) if (x['ProcessingJobStatus'] == 'Completed' and type(x['file_path']) is str) else None, axis=1)
 
-    # Rename columns and filter necessary fields
-    merged_df = merged_df.rename(columns={'Key': 'File Name', 'CreationTime': 'Start Time', 'ProcessingEndTime': 'End Time', 'ProcessingJobStatus': 'Status'})
-    merged_df = merged_df[['File Name', 'Start Time', 'End Time', 'Duration (hrs)', 'Status', 'Download Link']]
-    merged_df.reset_index(drop=True, inplace=True)
+        # Rename columns and filter necessary fields
+        merged_df = merged_df.rename(columns={'Key': 'File Name', 'CreationTime': 'Start Time', 'ProcessingEndTime': 'End Time', 'ProcessingJobStatus': 'Status'})
+        merged_df = merged_df[['File Name', 'Start Time', 'End Time', 'Duration (hrs)', 'Status', 'Download Link']]
+        merged_df.reset_index(drop=True, inplace=True)
+    except Exception as e:
+        print(f"exception: {e}")
+        merged_df = pd.DataFrame(columns=['File Name', 'Start Time', 'End Time', 'Duration (hrs)', 'Status', 'Download Link'])
     
     return merged_df
 
