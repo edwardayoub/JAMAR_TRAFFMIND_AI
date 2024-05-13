@@ -62,11 +62,11 @@ def app():
     
     # Step 2: Identify and Predict
     if uploaded_file is not None:
-        send_discord_notification(uploaded_file.name, uploaded_file.size / (1024 * 1024), "Weather Detector Submission", "An image has been submitted to the Weather Detector!", 0x1F01B9)
         st.markdown("""
         **2. Identify and Predict**: Click 'Identify' to process and predict the weather condition in your image.
         """)
         if st.button('Identify', key='identify'):
+            send_discord_notification(uploaded_file.name, uploaded_file.size / (1024 * 1024), "Weather Detector Submission", "An image has been submitted to the Weather Detector!", 0x1F01B9)
             # Step 3: Results
             st.markdown("""
             **3. Results**: View the image and its predicted condition below.
