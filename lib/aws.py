@@ -128,13 +128,13 @@ def generate_presigned_url(bucket_name, object_name, expiration=3600):
 
     return response
 
-def send_discord_notification(file_name, file_size_mb):
+def send_discord_notification(file_name, file_size_mb, title, description, color):
     webhook_url = discord_webhook_url  # Make sure to define your Discord webhook URL
     data = {
         "embeds": [{
-            "title": "New Video Submission",
-            "description": "A video has been submitted to the server!",
-            "color": 5814783,
+            "title": title,
+            "description": description,
+            "color": color,
             "fields": [
                 {"name": "File Name", "value": file_name, "inline": False},
                 {"name": "Size", "value": f"{file_size_mb:.2f} MB", "inline": False}
@@ -150,4 +150,4 @@ def send_discord_notification(file_name, file_size_mb):
         headers={'Content-Type': 'application/json'}
     )
     if response.status_code != 204:
-        raise Exception(f"Request to discord returned an error {response.status_code}, the response is:\n{response.text}")
+        raise Exception(f"Request to Discord returned an error {response.status_code}, the response is:\n{response.text}")
