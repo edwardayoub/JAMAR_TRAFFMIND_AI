@@ -6,7 +6,8 @@ from torchvision import transforms
 import cv2
 from ultralytics import RTDETR, YOLO
 import supervision as sv
-from lib import download_file
+from lib import download_file, send_discord_notification
+
 download_file('traffmind-models', 'rtdetr-l.pt', 'rtdetr-l.pt')
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -128,6 +129,7 @@ def app():
         **2. Detect and Classify**: Click 'Detect' to process your image and highlight the vehicles based on the type.
         """)
         if st.button('Detect', key='detect'):
+            send_discord_notification(uploaded_file.name, uploaded_file.size / (1024 * 1024), "6 Bins Classifier Submission", "An image has been submitted to the 6 Bins Classifier!", 0xFC440F)
             st.markdown("""
             **3. Results**: View the image with detected vehicles, color-coded by type, shown below.
             """)
