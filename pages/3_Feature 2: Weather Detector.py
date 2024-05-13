@@ -5,6 +5,7 @@ import numpy as np
 from io import BytesIO
 import tensorflow as tf
 import cv2
+from lib import send_discord_notification
 
 # Function to preprocess the image for the model
 def preprocess_image_for_prediction(image):
@@ -61,6 +62,7 @@ def app():
     
     # Step 2: Identify and Predict
     if uploaded_file is not None:
+        send_discord_notification(uploaded_file.name, uploaded_file.size / (1024 * 1024), "Weather Detector Submission", "An image has been submitted to the Weather Detector!", 0x1F01B9)
         st.markdown("""
         **2. Identify and Predict**: Click 'Identify' to process and predict the weather condition in your image.
         """)
