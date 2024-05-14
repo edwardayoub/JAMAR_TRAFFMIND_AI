@@ -93,7 +93,7 @@ def start_sagemaker_processing_job(infile,machine_type, environment_variables):
             }
         },
         'StoppingCondition': {
-            'MaxRuntimeInSeconds': 14400
+            'MaxRuntimeInSeconds': 3600 * 10
         }
     }
 
