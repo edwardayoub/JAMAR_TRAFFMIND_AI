@@ -99,6 +99,8 @@ def get_s3_status():
         merged_df = pd.DataFrame(columns=['File Name', 'Start Time', 'End Time', 'Duration (hrs)', 'Status', 'Download Link'])
         merged_df = merged_df.sort_values(by=['Status', 'End Time'], ascending=[True, False])
         # order by Status and End Time
+
+    merged_df = merged_df.sort_values(by=['Start Time'], ascending=False)
     
     return merged_df
 
