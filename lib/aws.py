@@ -60,7 +60,7 @@ def get_s3_status():
     
     # Check if the bucket is empty
     try:
-        unprocessed_files = s3.list_objects_v2(Bucket="traffmind-client-unprocessed-jamar")
+        unprocessed_files = s3.list_objects_v2(Bucket="traffmind-ai-sam-s3uploadbucket-fxan2m2lzd11")
         status_df = pd.DataFrame(unprocessed_files['Contents'])
         status_df['hash_name'] = status_df['Key'].apply(lambda x: hashlib.md5(x.encode()).hexdigest())
         status_df['LastModified'] = pd.to_datetime(status_df['LastModified'], utc=True)
