@@ -74,6 +74,7 @@ def get_s3_status():
         processed_files = s3.list_objects_v2(Bucket="traffmind-client-processed-jamar")
         processed_files_df = pd.DataFrame(processed_files['Contents'])
         processed_files_df['file_path'] = processed_files_df['Key']
+        print(processed_files_df['key'])
 
         processed_files_df['Key'] = processed_files_df['Key'].apply(lambda x: x.split('/')[1])
         processed_files_df['extension'] = processed_files_df['Key'].apply(lambda x: x.split('.')[-1])
