@@ -228,7 +228,7 @@ def extract_first_frame(bucket, key):
         signature_version = 's3v4',
     )
 
-    s3_client = boto3.client('s3', config=my_config)
+    s3_client = boto3.client('s3', config=my_config, region_name="us-east-2")
 
     
     # Generate a pre-signed URL to access the video
