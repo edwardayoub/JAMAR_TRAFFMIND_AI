@@ -3,10 +3,9 @@ pandas
 tensorflow
 Pillow
 numpy
-opencv-contrib-python-headless
+opencv-python
 torch
 torchvision
 ultralytics
 supervision
 streamlit-drawable-canvas
-
