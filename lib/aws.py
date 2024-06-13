@@ -222,12 +222,20 @@ def write_vectors_to_s3(vectors, bucket, key):
 def extract_first_frame(bucket, key):
     import cv2
 
-    s3_client = boto3.client('s3')
+    from botocore.config import Config
+
+    my_config = Config(
+        signature_version = 's3v4',
+    )
+
+    s3_client = boto3.client('s3', config=my_config)
+
     
     # Generate a pre-signed URL to access the video
     url = s3_client.generate_presigned_url('get_object', 
                                            Params={'Bucket': bucket, 'Key': key}, 
                                            ExpiresIn=7600)
+
     
     # Use OpenCV to capture the first frame
     cap = cv2.VideoCapture(url)
