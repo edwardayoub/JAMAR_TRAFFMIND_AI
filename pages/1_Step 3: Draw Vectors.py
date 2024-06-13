@@ -42,7 +42,7 @@ def app():
     if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
         print(f"Extracting first frame from {bg_video_name}")
         print(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
-        frame = extract_first_frame("traffmind-client-unprocessed-jamar-dev", bg_video_name)
+        frame = extract_first_frame("jamar", f"client_upload/{bg_video_name}")
         bg_image = Image.fromarray(frame)
         st.session_state['bg_image'] = bg_image
         st.session_state['bg_video_name'] = bg_video_name
