@@ -234,7 +234,7 @@ def extract_first_frame(bucket, key):
     cap.release()
 
     # convert to RGB from BGR without opencv, just permute the channels
-    frame = frame[..., ::-1]
+    frame = frame[:, :, ::-1]
 
     if ret:
         return frame
