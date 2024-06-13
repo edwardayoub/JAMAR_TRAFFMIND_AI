@@ -233,8 +233,8 @@ def extract_first_frame(bucket, key):
     ret, frame = cap.read()
     cap.release()
 
-    # convert to RGB
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    # convert to RGB from BGR without opencv, just permute the channels
+    frame = frame[..., ::-1]
 
     if ret:
         return frame
