@@ -23,7 +23,7 @@ def app():
 
     # Manage initial load and refresh with session state
     if 'first_load' not in st.session_state:
-        names = list_files_paginated("traffmind-client-unprocessed-jamar-dev","", file_type='mp4')
+        names = list_files_paginated("jamar","client_upload/", file_type='mp4')
         st.session_state['first_load'] = True
         st.session_state['names'] = names
 
@@ -42,13 +42,14 @@ def app():
     if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
         print(f"Extracting first frame from {bg_video_name}")
         print(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
-        frame = extract_first_frame("jamar", f"client_upload/{bg_video_name}")
-        bg_image = Image.fromarray(frame)
-        st.session_state['bg_image'] = bg_image
-        st.session_state['bg_video_name'] = bg_video_name
+        frame = extract_first_frame("jamar", bg_video_name)
+        if frame is not None:
+            bg_image = Image.fromarray(frame)
+            st.session_state['bg_image'] = bg_image
+            st.session_state['bg_video_name'] = bg_video_name
 
-        # clear the canvas
-        st.session_state['canvas_result'] = None
+            # clear the canvas
+            st.session_state['canvas_result'] = None
 
 
 
@@ -107,7 +108,7 @@ def app():
     # Auto-refresh on the initial load or when the refresh button is pressed
     if 'first_load' not in st.session_state or refresh:
         try:
-            names = list_files_paginated("traffmind-client-unprocessed-jamar-dev","", file_type='mp4')
+            names = list_files_paginated("jamar","client_upload/", file_type='mp4')
             st.session_state['names'] = names
             st.session_state['first_load'] = False
         except Exception as e:

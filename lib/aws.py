@@ -234,9 +234,10 @@ def extract_first_frame(bucket, key):
     cap.release()
 
     # convert to RGB from BGR without opencv, just permute the channels
-    frame = frame[:, :, ::-1]
 
-    if ret:
+    if ret and frame is not None:
+        frame = frame[:, :, ::-1]
         return frame
     else:
         print(f'Failed to capture video from {url}')
+        return None
