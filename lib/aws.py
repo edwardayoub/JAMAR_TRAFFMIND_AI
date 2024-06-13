@@ -5,7 +5,6 @@ from pytz import timezone
 import hashlib
 import requests
 import json
-import cv2
 
 # read keys in from environment variables
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
@@ -221,6 +220,8 @@ def write_vectors_to_s3(vectors, bucket, key):
 
 
 def extract_first_frame(bucket, key):
+    import cv2
+
     s3_client = boto3.client('s3')
     
     # Generate a pre-signed URL to access the video
