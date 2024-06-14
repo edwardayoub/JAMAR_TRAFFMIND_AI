@@ -4,7 +4,7 @@ from PIL import Image
 from lib.aws import list_files_paginated, extract_first_frame, convert_lines_to_vectors, write_vectors_to_s3
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(st.__name__)
 
 print("print test")
 logger.info("logger test")
