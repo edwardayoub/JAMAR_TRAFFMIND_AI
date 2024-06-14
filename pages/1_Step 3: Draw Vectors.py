@@ -77,40 +77,40 @@ def app():
         )
 
 
-    if canvas_result.json_data is not None and canvas_result.json_data['objects'] != []:
-        vectors = convert_lines_to_vectors(canvas_result.json_data['objects'])
-        st.session_state['vectors'] = vectors
+        if canvas_result.json_data is not None and canvas_result.json_data['objects'] != []:
+            vectors = convert_lines_to_vectors(canvas_result.json_data['objects'])
+            st.session_state['vectors'] = vectors
 
-        for i, (x1, y1, x2, y2) in enumerate(vectors):
-            col1, col2, col3, col4, col5 = st.columns(5)
-            
-            with col1:
-                st.write(f":blue[{x1, y1, x2, y2}]")
-            with col2:
-                if col2.button("N", key=f"N_{i}"):
-                    handle_click("N", i)
-            with col3:
-                if col3.button("S", key=f"S_{i}"):
-                    handle_click("S", i)
-            with col4:
-                if col4.button("E", key=f"E_{i}"):
-                    handle_click("E", i)
-            with col5:
-                if col5.button("W", key=f"W_{i}"):
-                    handle_click("W", i)
-        
-        # Display the selected direction for each row
-        st.write(f"Row {i} selected direction: {st.session_state.get(f'button_{i}', 'None')}")
-        if st.button("Save vectors"):
-            file_type = st.session_state.get('bg_video_name').split('.')[-1]
-
-            v = {}
-            # make a dictionary of directions to vectors
             for i, (x1, y1, x2, y2) in enumerate(vectors):
-                v[st.session_state.get(f'button_{i}')] = ((x1, y1), (x2, y2))
-            
-            write_vectors_to_s3(v, "jamar", f'submissions/{st.session_state.get("bg_video_name").replace("." + file_type, "")}/vectors.txt')
-            st.write(f"Vectors saved!")
+                col1, col2, col3, col4, col5 = st.columns(5)
+                
+                with col1:
+                    st.write(f":blue[{x1, y1, x2, y2}]")
+                with col2:
+                    if col2.button("N", key=f"N_{i}"):
+                        handle_click("N", i)
+                with col3:
+                    if col3.button("S", key=f"S_{i}"):
+                        handle_click("S", i)
+                with col4:
+                    if col4.button("E", key=f"E_{i}"):
+                        handle_click("E", i)
+                with col5:
+                    if col5.button("W", key=f"W_{i}"):
+                        handle_click("W", i)
+
+            # Display the selected direction for each row
+            st.write(f"Row {i} selected direction: {st.session_state.get(f'button_{i}', 'None')}")
+            if st.button("Save vectors"):
+                file_type = st.session_state.get('bg_video_name').split('.')[-1]
+
+                v = {}
+                # make a dictionary of directions to vectors
+                for i, (x1, y1, x2, y2) in enumerate(vectors):
+                    v[st.session_state.get(f'button_{i}')] = ((x1, y1), (x2, y2))
+                
+                write_vectors_to_s3(v, "jamar", f'submissions/{st.session_state.get("bg_video_name").replace("." + file_type, "")}/vectors.txt')
+                st.write(f"Vectors saved!")
 
 
 
