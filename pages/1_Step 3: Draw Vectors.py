@@ -6,9 +6,6 @@ import logging
 
 logger = logging.getLogger(st.__name__)
 
-print("print test")
-logger.info("logger test")
-logger.warning("logger test warning")
 
 # Function to handle button clicks
 def handle_click(direction, index):
@@ -45,13 +42,14 @@ stroke_width = 3
 bg_image = None
 canvas_result = None
 
-logger.info(f"bg_video_name: {bg_video_name}")
+logger.warning(f"bg_video_name: {bg_video_name}")
 
 if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
     if st.session_state.get('bg_video_name') is not None:
-        logger.info(f"Extracting first frame from {bg_video_name}")
-        logger.info(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
+        logger.warning(f"Extracting first frame from {bg_video_name}")
+        logger.warning(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
         frame = extract_first_frame("jamar", bg_video_name)
+        logger.warning(f"Frame extracted, frame is not None: {frame is not None}")
         if frame is not None:
             bg_image = Image.fromarray(frame)
             st.session_state['bg_image'] = bg_image
@@ -68,8 +66,9 @@ if width is None:
     width = 640
     height = 480
 
-
+logger.warning(f"about to draw canvas")
 if st.session_state.get('bg_image', False):
+    logger.warning(f"Drawing canvas")
     canvas_result = st_canvas(
         fill_color="rgba(255, 165, 0, 0.3)",
         stroke_width=stroke_width,
