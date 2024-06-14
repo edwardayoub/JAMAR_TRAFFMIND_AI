@@ -5,6 +5,11 @@ from pytz import timezone
 import hashlib
 import requests
 import json
+import logging
+import streamlit as st
+
+logger = logging.getLogger(st.__name__)
+
 
 # read keys in from environment variables
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
@@ -229,18 +234,20 @@ def extract_first_frame(bucket, key):
     )
 
     s3_client = boto3.client('s3', region_name="us-east-2", aws_access_key_id=access_key, aws_secret_access_key=secret_key)
-
+    logger.warning("generating presigned url")
     
     # Generate a pre-signed URL to access the video
     url = s3_client.generate_presigned_url('get_object', 
                                            Params={'Bucket': bucket, 'Key': key}, 
                                            ExpiresIn=7600)
 
-    
+    logger.warning(f"presigned url: {url}")
     # Use OpenCV to capture the first frame
+    logger.warning(f"capturing video from {url}")
     cap = cv2.VideoCapture(url)
     ret, frame = cap.read()
     cap.release()
+    logger.warning(f"frame is not None: {frame is not None}")
 
     # convert to RGB from BGR without opencv, just permute the channels
 
@@ -248,5 +255,5 @@ def extract_first_frame(bucket, key):
         frame = frame[:, :, ::-1]
         return frame
     else:
-        print(f'Failed to capture video from {url}')
+        logger.warning(f'Failed to capture video from {url}')
         return None
