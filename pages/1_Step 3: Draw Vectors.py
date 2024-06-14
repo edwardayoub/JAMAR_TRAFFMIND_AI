@@ -31,7 +31,7 @@ def app():
 
 
     # Dropdown for selecting a background image
-    bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state['names'])
+    bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state.get('names', []))
 
     # Set page configuration
     stroke_width = 3
