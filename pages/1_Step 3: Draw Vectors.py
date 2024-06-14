@@ -2,6 +2,9 @@ import streamlit as st
 from streamlit_drawable_canvas import st_canvas
 from PIL import Image
 from lib.aws import list_files_paginated, extract_first_frame, convert_lines_to_vectors, write_vectors_to_s3
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Function to handle button clicks
 def handle_click(direction, index):
@@ -39,12 +42,12 @@ def app():
     bg_image = None
     canvas_result = None
 
-    print(f"bg_video_name: {bg_video_name}")
+    logger.info(f"bg_video_name: {bg_video_name}")
 
     if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
         if st.session_state.get('bg_video_name') is not None:
-            print(f"Extracting first frame from {bg_video_name}")
-            print(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
+            logger.info(f"Extracting first frame from {bg_video_name}")
+            logger.info(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
             frame = extract_first_frame("jamar", bg_video_name)
             if frame is not None:
                 bg_image = Image.fromarray(frame)
