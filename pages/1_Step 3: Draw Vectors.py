@@ -53,15 +53,22 @@ def app():
                 st.session_state['canvas_result'] = None
 
 
+    width=st.session_state.get('bg_image', None)
+    height=st.session_state.get('bg_image', None)
+
+    if width is None:
+        width = 640
+        height = 480
 
     canvas_result = st_canvas(
         fill_color="rgba(255, 0, 0, 0.3)",
         stroke_width=stroke_width,
         stroke_color='Black',
-        background_color="#eee",
+        background_color="#ffffff",
         background_image=st.session_state.get('bg_image', None),
         update_streamlit=True,
-        height=480,
+        width=width,
+        height=height,
         drawing_mode=drawing_mode,
         display_toolbar=True,
         key=st.session_state['bg_video_name'] if st.session_state.get('bg_video_name', False) else "canvas"
