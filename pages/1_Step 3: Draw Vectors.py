@@ -52,6 +52,7 @@ if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.ses
         logger.warning(f"Frame extracted, frame is not None: {frame is not None}")
         if frame is not None:
             bg_image = Image.fromarray(frame)
+
             st.session_state['bg_image'] = bg_image
             st.session_state['bg_video_name'] = bg_video_name
 
@@ -61,8 +62,10 @@ if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.ses
 
 if bg_image:
     width, height = bg_image.size
+    logger.warning(f"width: {width}, height: {height}")
 else:
     width, height = 800, 800
+    logger.warning(f"setting to default width: {width}, height: {height}")
 
 logger.warning(f"about to draw canvas")
 if st.session_state.get('bg_image', False):
