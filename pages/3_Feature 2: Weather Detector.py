@@ -25,6 +25,11 @@ def preprocess_image_for_prediction(image):
     wpercent = (base_height / float(image.size[1]))
     wsize = int((float(image.size[0]) * float(wpercent)))
     image = image.resize((wsize, base_height), Image.Resampling.LANCZOS)
+
+    # if rgba, convert to rgb
+    if image.mode == 'RGBA':
+        r, g, b, a = image.split()
+        image = Image.merge('RGB', (r, g, b))
     
     if image.size[0] >= image.size[1]:
         if sky_side == 0:
@@ -37,6 +42,8 @@ def preprocess_image_for_prediction(image):
         hsize = int((float(image.size[1]) * float(wpercent)))
         image = image.resize((base_width, hsize), Image.Resampling.LANCZOS)
         image = image.crop((0, 0, image.size[0], 400))
+
+
 
     image = ImageOps.invert(image)
     image = image.resize((100, 100), Image.Resampling.LANCZOS)
