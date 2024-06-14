@@ -39,6 +39,8 @@ def app():
     bg_image = None
     canvas_result = None
 
+    print(f"bg_video_name: {bg_video_name}")
+
     if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
         if st.session_state.get('bg_video_name') is not None:
             print(f"Extracting first frame from {bg_video_name}")
