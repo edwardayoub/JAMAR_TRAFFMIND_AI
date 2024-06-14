@@ -40,16 +40,17 @@ def app():
     canvas_result = None
 
     if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
-        print(f"Extracting first frame from {bg_video_name}")
-        print(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
-        frame = extract_first_frame("jamar", bg_video_name)
-        if frame is not None:
-            bg_image = Image.fromarray(frame)
-            st.session_state['bg_image'] = bg_image
-            st.session_state['bg_video_name'] = bg_video_name
+        if st.session_state.get('bg_video_name') is not None:
+            print(f"Extracting first frame from {bg_video_name}")
+            print(f"{bg_video_name}, {st.session_state.get('bg_image_shown', False)}")
+            frame = extract_first_frame("jamar", bg_video_name)
+            if frame is not None:
+                bg_image = Image.fromarray(frame)
+                st.session_state['bg_image'] = bg_image
+                st.session_state['bg_video_name'] = bg_video_name
 
-            # clear the canvas
-            st.session_state['canvas_result'] = None
+                # clear the canvas
+                st.session_state['canvas_result'] = None
 
 
 
