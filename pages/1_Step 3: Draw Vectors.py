@@ -60,12 +60,14 @@ def app():
         width = 640
         height = 480
 
+    image = Image.open("3013-3073_Standard_SCU2AD_2022-10-12_0700.001_median_frame.png")
+
     canvas_result = st_canvas(
-        fill_color="rgba(255, 0, 0, 0.3)",
+        fill_color="rgba(255, 165, 0, 0.3)",
         stroke_width=stroke_width,
         stroke_color='Black',
         background_color="#ffffff",
-        background_image=st.session_state.get('bg_image', None),
+        background_image=image,
         update_streamlit=True,
         width=width,
         height=height,
