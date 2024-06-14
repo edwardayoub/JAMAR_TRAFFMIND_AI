@@ -59,12 +59,10 @@ if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.ses
             st.session_state['canvas_result'] = None
 
 
-width=st.session_state.get('bg_image', None)
-height=st.session_state.get('bg_image', None)
-
-if width is None:
-    width = 640
-    height = 480
+if bg_image:
+    width, height = bg_image.size
+else:
+    width, height = 800, 800
 
 logger.warning(f"about to draw canvas")
 if st.session_state.get('bg_image', False):
