@@ -45,7 +45,7 @@ canvas_result = None
 logger.warning(f"bg_video_name: {bg_video_name}")
 
 if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
-    if st.session_state.get('bg_video_name') is not None:
+    if bg_video_name:
         logger.warning(f"Extracting first frame from {bg_video_name}")
         logger.warning(f"{bg_video_name}")
         frame = extract_first_frame("jamar", bg_video_name)
