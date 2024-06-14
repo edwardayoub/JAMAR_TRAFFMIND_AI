@@ -6,6 +6,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+print("print test")
+logger.info("logger test")
+logger.warning("logger test warning")
+
 # Function to handle button clicks
 def handle_click(direction, index):
     st.session_state[f"button_{index}"] = direction
