@@ -60,7 +60,6 @@ def app():
         width = 640
         height = 480
 
-    image = Image.Open("3013-3073_Standard_SCU2AD_2022-10-12_0700.001_median_frame.png")
 
     if st.session_state.get('bg_image', False):
         canvas_result = st_canvas(
