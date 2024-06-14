@@ -26,7 +26,7 @@ st.header("TraffMind AI Traffic Counter")
 
 # Manage initial load and refresh with session state
 if 'first_load' not in st.session_state:
-    names = list_files_paginated("jamar","client_upload/", file_type='mp4')
+    names = list_files_paginated("jamar","client_upload/", file_type='*')
     st.session_state['first_load'] = True
     st.session_state['names'] = names
 
@@ -42,16 +42,25 @@ stroke_width = 3
 bg_image = None
 canvas_result = None
 
-logger.warning(f"bg_video_name: {bg_video_name}")
+@st.cache_data
+def get_first_frame(video_name):
+    logger.warning(f"Extracting first frame from {video_name}")
+    logger.warning(f"{video_name}")
+    frame = extract_first_frame("jamar", video_name)
+    logger.warning(f"Frame extracted, frame is not None: {frame is not None}")
+    return frame
+
+@st.cache_data
+def get_image_from_frame(frame):
+    return Image.fromarray(frame)
+    
 
 if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
     if bg_video_name:
-        logger.warning(f"Extracting first frame from {bg_video_name}")
-        logger.warning(f"{bg_video_name}")
-        frame = extract_first_frame("jamar", bg_video_name)
-        logger.warning(f"Frame extracted, frame is not None: {frame is not None}")
+        frame = get_first_frame(bg_video_name)
+
         if frame is not None:
-            bg_image = Image.fromarray(frame)
+            bg_image = get_image_from_frame(frame)
 
             st.session_state['bg_image'] = bg_image
             st.session_state['bg_video_name'] = bg_video_name
@@ -62,6 +71,9 @@ if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.ses
 
 if bg_image:
     width, height = bg_image.size
+    logger.warning(f"width: {width}, height: {height}")
+elif st.session_state.get('bg_image', False):
+    width, height = st.session_state['bg_image'].size
     logger.warning(f"width: {width}, height: {height}")
 else:
     width, height = 800, 800
@@ -126,7 +138,7 @@ if st.session_state.get('bg_image', False):
 # Auto-refresh on the initial load or when the refresh button is pressed
 if 'first_load' not in st.session_state or refresh:
     try:
-        names = list_files_paginated("jamar","client_upload/", file_type='mp4')
+        names = list_files_paginated("jamar","client_upload/", file_type='*')
         st.session_state['names'] = names
         st.session_state['first_load'] = False
     except Exception as e:

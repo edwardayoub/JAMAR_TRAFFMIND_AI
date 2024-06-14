@@ -8,18 +8,36 @@ from ultralytics import RTDETR, YOLO
 import supervision as sv
 from lib import download_file, send_discord_notification
 
-download_file('traffmind-models', 'rtdetr-l.pt', 'rtdetr-l.pt')
+st.set_page_config(page_title="Vehicle Detection Interface", layout="wide")
+
+
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-class_model_path = './model/yolov8-cls.yaml'
-check_point_dir = './model/yolov8n-cls-20240508-002451.pt'
 
-state_dict = torch.load(check_point_dir, map_location=device)
-class_model = YOLO(class_model_path)  # Assuming YOLO is a class you have defined or imported
-class_model = class_model.model.model
-class_model.to(device)
-class_model.eval()
-class_model.load_state_dict(state_dict)
+
+@st.cache_resource
+def get_model():
+    download_file('traffmind-models', 'rtdetr-l.pt', 'rtdetr-l.pt')
+
+    class_model_path = './model/yolov8-cls.yaml'
+    check_point_dir = './model/yolov8n-cls-20240508-002451.pt'
+
+    state_dict = torch.load(check_point_dir, map_location=device)
+    class_model = YOLO(class_model_path)  # Assuming YOLO is a class you have defined or imported
+    class_model = class_model.model.model
+    class_model.to(device)
+    class_model.eval()
+    class_model.load_state_dict(state_dict)
+    return class_model
+
+class_model = get_model()
+
+
+@st.cache_resource
+def load_model():
+    return RTDETR('rtdetr-l.pt')  # Path to your model
+
+model = load_model()
 
 size = 256
 transform = transforms.Compose([
@@ -71,9 +89,10 @@ def detect_objects_and_draw(image):
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
     # Load the model and perform detection
-    model = RTDETR('rtdetr-l.pt')  # Path to your model
+
     results = model(frame)[0]
     detections = sv.Detections.from_ultralytics(results)
+    print(detections)
     
     # Filter detections and convert to PIL
     detections = detections[(detections['class_name'] == 'car') | (detections['class_name'] == 'truck') | (detections['class_name'] == 'bus') | (detections['class_name'] == 'motorcycle')]
@@ -94,7 +113,6 @@ def detect_objects_and_draw(image):
 
 
 def app():
-    st.set_page_config(page_title="Vehicle Detection Interface", layout="wide")
     
     st.header("Vehicle Detection System")
     st.subheader("Detect vehicles in uploaded images using advanced neural networks")

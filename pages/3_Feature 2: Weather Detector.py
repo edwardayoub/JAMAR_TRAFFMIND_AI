@@ -44,6 +44,11 @@ def preprocess_image_for_prediction(image):
     img_array = np.expand_dims(img_array, axis=0)
 
     return img_array
+
+@st.cache_resource
+def get_loaded_model(model_path):
+    return tf.keras.models.load_model(model_path)
+
 def app():
     st.set_page_config(page_title="TraffMind AI Weather Detector", layout="wide")
     
@@ -58,7 +63,7 @@ def app():
     st.markdown("""
     **1. Upload Image**: Drag and drop or select an image file for prediction. Supported format: JPEG.
     """)
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg"])
+    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
     
     # Step 2: Identify and Predict
     if uploaded_file is not None:
@@ -75,7 +80,7 @@ def app():
             st.write("Identifying...")
             preprocessed_image = preprocess_image_for_prediction(image)
             model_path = "./model/traffmind_weather_beta1.h5"
-            loaded_model = tf.keras.models.load_model(model_path)
+            loaded_model = get_loaded_model(model_path)
             predictions = loaded_model.predict(preprocessed_image)
             classes = ['Cloudy', 'Sunny', 'Rainy', 'Snowy', 'Foggy']
             prediction = classes[np.argmax(predictions)]
