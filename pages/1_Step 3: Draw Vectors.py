@@ -9,6 +9,7 @@ logger = logging.getLogger(st.__name__)
 
 # Function to handle button clicks
 def handle_click(direction, index):
+    logger.warning(f"Button {index} clicked with direction {direction}")
     st.session_state[f"button_{index}"] = direction
 
 color_map = {
@@ -27,6 +28,8 @@ st.header("TraffMind AI Traffic Counter")
 # Manage initial load and refresh with session state
 if 'first_load' not in st.session_state:
     names = list_files_paginated("jamar","client_upload/", file_type='*')
+    # get just file names
+    names = [name.split('/')[-1] for name in names]
     st.session_state['first_load'] = True
     st.session_state['names'] = names
 
@@ -46,7 +49,7 @@ canvas_result = None
 def get_first_frame(video_name):
     logger.warning(f"Extracting first frame from {video_name}")
     logger.warning(f"{video_name}")
-    frame = extract_first_frame("jamar", video_name)
+    frame = extract_first_frame("jamar", f"client_upload/{video_name}")
     logger.warning(f"Frame extracted, frame is not None: {frame is not None}")
     return frame
 
@@ -102,25 +105,17 @@ if st.session_state.get('bg_image', False):
         st.session_state['vectors'] = vectors
 
         for i, (x1, y1, x2, y2) in enumerate(vectors):
-            col1, col2, col3, col4, col5 = st.columns(5)
+            col1, col2 = st.columns(2)
             
             with col1:
-                st.write(f":blue[{x1, y1, x2, y2}]")
+                st.write(f":blue[Vector {i + 1}]")
             with col2:
-                if col2.button("N", key=f"N_{i}"):
-                    handle_click("N", i)
-            with col3:
-                if col3.button("S", key=f"S_{i}"):
-                    handle_click("S", i)
-            with col4:
-                if col4.button("E", key=f"E_{i}"):
-                    handle_click("E", i)
-            with col5:
-                if col5.button("W", key=f"W_{i}"):
-                    handle_click("W", i)
-
+                directions_list = ["N", "S", "E", "W"]
+                option = None
+                option = st.selectbox(f"Vector {i + 1} Direction", directions_list, key=f"direction_{i}")
+                if option:
+                    handle_click(option, i )
         # Display the selected direction for each row
-        st.write(f"Row {i} selected direction: {st.session_state.get(f'button_{i}', 'None')}")
         if st.button("Save vectors"):
             file_type = st.session_state.get('bg_video_name').split('.')[-1]
 
