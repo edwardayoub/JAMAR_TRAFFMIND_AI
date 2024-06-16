@@ -149,7 +149,7 @@ if 'first_load' not in st.session_state or refresh:
 
 # Link to check status
 st.markdown("""
-**2. Check Status**: Click the following link to check the status of your submission.
+**3. Check Status**: Click the following link to check the status of your submission.
 """)
 
 st.page_link(

@@ -21,7 +21,7 @@ def start_sagemaker_processing_job(infile, machine, environment_variables):
     
     region = 'us-east-2'
     logger.info(f" starting sagemaker processing job for {infile}")
-    VERSION = "1.2.17"
+    VERSION = "1.2.20"
 
     # Initialize the SageMaker client
     sagemaker_client = boto3.client('sagemaker', region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
@@ -39,7 +39,7 @@ def start_sagemaker_processing_job(infile, machine, environment_variables):
     filetype = infile.split('.')[-1]
     base_filename = infile.split('/')[-1].replace(f'.{filetype}', '')
     input_path = f's3://{bucket}/client_upload/{infile}'
-    output_path = f's3://{bucket}/outputs/{base_filename}/{datetime_str}'
+    output_path = f's3://{bucket}/outputs/{base_filename}'
     tracks_output_path = f'{output_path}/tracks/'
 
     epoch_time = int(time.time())
@@ -47,6 +47,11 @@ def start_sagemaker_processing_job(infile, machine, environment_variables):
 
     hash_object = hashlib.md5(infile.encode())
     hash_filename = hash_object.hexdigest()
+
+    VECTORS_PREFIX = f"submissions/{base_filename}"
+
+    #Add vectors prefix to environment variables
+    environment_variables["VECTORS_PREFIX"] = VECTORS_PREFIX
     
 
     # Define the processing job configuration
@@ -154,7 +159,7 @@ def run(infile):
     while machine_types:
         machine_type = machine_types.pop()
         try:
-            start_sagemaker_processing_job(infile, machine_type, {"AWS": "True", "EVERY": "3", "SHOW_VECTORS": "True", "CLASSIFIER_YAML_PATH": "classifier/yolo_cls/yolov8-cls-6.yaml", "IMAGE_CLASSIFIER_PATH": "/opt/ml/processing/model/model.pt"})
+            start_sagemaker_processing_job(infile, machine_type, {"AWS": "True", "VECTORS_BUCKET": "Jamar",  "EVERY": "3", "SHOW_VECTORS": "True", "CLASSIFIER_YAML_PATH": "classifier/yolo_cls/yolov8-cls-6.yaml", "IMAGE_CLASSIFIER_PATH": "/opt/ml/processing/model/model.pt", "WRITE_VIDEO": "True", "WRITE_TRACKS": "True", "VECTORS_PATTERN": "vector"})
             break
         except ClientError as e:
             print(e)
