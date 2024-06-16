@@ -26,11 +26,11 @@ uploaded_video_name = st.empty()
 
 # Link to check status
 st.markdown("""
-**2. Check Status**: Click the following link to check the status of your submission.
+**2. Draw Vectors**: Before submitting the job, you can draw vectors on the video to track vehicles.
 """)
 
 st.page_link(
-    "pages/1_Step 2: Traffic Tracker and Classifier.py",
-    label=":blue[Step 2: Traffic Tracker and Classifier]",
+    "pages/1_Step 2: Draw Vectors.py",
+    label=":blue[Step 2: Draw Vectors]",
     disabled=False
 )
