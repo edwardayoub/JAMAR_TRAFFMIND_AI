@@ -159,7 +159,7 @@ def run(infile):
     while machine_types:
         machine_type = machine_types.pop()
         try:
-            start_sagemaker_processing_job(infile, machine_type, {"AWS": "True", "VECTORS_BUCKET": "Jamar",  "EVERY": "3", "SHOW_VECTORS": "True", "CLASSIFIER_YAML_PATH": "classifier/yolo_cls/yolov8-cls-6.yaml", "IMAGE_CLASSIFIER_PATH": "/opt/ml/processing/model/model.pt", "WRITE_VIDEO": "True", "WRITE_TRACKS": "True", "VECTORS_PATTERN": "vector"})
+            start_sagemaker_processing_job(infile, machine_type, {"AWS": "True", "VECTORS_BUCKET": "jamar",  "EVERY": "3", "SHOW_VECTORS": "True", "CLASSIFIER_YAML_PATH": "classifier/yolo_cls/yolov8-cls-6.yaml", "IMAGE_CLASSIFIER_PATH": "/opt/ml/processing/model/model.pt", "WRITE_VIDEO": "True", "WRITE_TRACKS": "True", "VECTORS_PATTERN": "vector"})
             break
         except ClientError as e:
             print(e)
