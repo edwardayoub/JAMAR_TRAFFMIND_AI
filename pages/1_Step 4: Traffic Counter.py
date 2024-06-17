@@ -14,9 +14,11 @@ if 'first_load' not in st.session_state:
     # get just file names
     name_to_key = {name.split('/')[-1]: name for name in names}
 
+
     names = [name.split('/')[-1] for name in names]
     st.session_state['first_load'] = True
     st.session_state['names'] = names
+    st.session_state['name_to_key'] = name_to_key
 
 refresh = st.button('Refresh Counts', key='refresh')
 
@@ -25,26 +27,28 @@ count_file_name = st.selectbox("Select a count file", st.session_state.get('name
 
 if count_file_name:
     # download the file from s3
-    key = name_to_key[count_file_name]
+    key = st.session_state['name_to_key'][count_file_name]
     download_file("jamar", key, count_file_name)
+
+    minute_increment = 15
 
 
     count_file_path = count_file_name
     try:
         with open(count_file_path, 'r') as f:
 
-            d = eval(f.readlines()[0])
+            movement_dict_list = eval(f.readlines()[0])
             # remove empty dicts from list
-            d = [x for x in d if x]
+            movement_dict_list = [x for x in movement_dict_list if x]
             # remove index column
 
             rows = []
 
-            for i in d:
+            for i, movement_dict in enumerate(movement_dict_list):
                 for class_number in range(1, 7):
-                    row = {'class': class_number}
-                    for feature, values in i.items():
-                        row[feature] = values.get(class_number, 0)
+                    row = {'From': f"{minute_increment * i} min", 'To': f"{minute_increment * (i + 1)} min",'class': class_number}
+                    for feature, counts_dict in movement_dict.items():
+                        row[feature] = counts_dict.get(class_number, 0)
                     rows.append(row)
             final_df = pd.DataFrame(rows)
 
