@@ -14,6 +14,9 @@ if 'first_load' not in st.session_state or 'names' not in st.session_state or 'n
     # get just file names
     name_to_key = {name.split('/')[-1]: name for name in names}
 
+    # filter out keys that have 'crosswalk' in them
+    names = [name for name in names if 'crosswalk' not in name]
+
 
     names = [name.split('/')[-1] for name in names]
     st.session_state['first_load'] = True
