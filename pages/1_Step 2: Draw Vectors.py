@@ -24,7 +24,7 @@ st.set_page_config(page_title="TraffMind AI Traffic Counter", layout="wide")
 
 drawing_mode ="line"
 
-st.header("TraffMind AI Traffic Counter")
+st.header("TraffMind AI Draw Vectors")
 
 # Manage initial load and refresh with session state
 if 'first_load' not in st.session_state:

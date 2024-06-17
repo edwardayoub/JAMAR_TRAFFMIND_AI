@@ -18,11 +18,11 @@ discord_webhook_url = os.getenv("WEBHOOK_URL")
 
 region = 'us-east-2'
 
-def download_file(bucket_name, file_name, path):
+def download_file(bucket_name, key, local_path):
 
     s3_client = boto3.client("s3", region_name=region, aws_access_key_id=access_key, aws_secret_access_key=secret_key)
-    print(f"Downloading. bucket: {bucket_name}, file: {file_name}, path: {path}")
-    s3_client.download_file(bucket_name, path, file_name)
+    print(f"Downloading. bucket: {bucket_name}, key: {key}, local_path: {local_path}")
+    s3_client.download_file(bucket_name, key, local_path)
 
 def list_files(bucket_name, prefix, file_type='*'):
     

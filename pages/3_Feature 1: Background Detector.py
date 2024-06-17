@@ -33,7 +33,7 @@ st.markdown("""
 if background_images:
     if selected_submission:
         file_name = selected_submission.split("/")[-1]
-        download_file(bucket, file_name, selected_submission)
+        download_file(bucket, selected_submission,file_name)
         with open(file_name, "rb") as file:
             print(f'reading file {file_name}')
             file_bytes = file.read()
