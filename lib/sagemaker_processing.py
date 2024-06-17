@@ -33,8 +33,8 @@ def start_sagemaker_processing_job(infile, machine, environment_variables):
    
     # This maps model class ids to client facing class names
     # Eg model assigns 0 to motorcycle, but motorcycle is class 1 in 13 bin classification scheme
-    class_mapping_path = "s3://traffmind-classifiers/yolov8n-cls-best-20240611-132930/class_mapping.json"
-    classifier_model_path = "s3://traffmind-classifiers/yolov8n-cls-best-20240611-132930/model.pt"
+    class_mapping_path = "s3://traffmind-classifiers/yolov8m-cls-best-20240617-120845/class_mapping.json"
+    classifier_model_path = "s3://traffmind-classifiers/yolov8m-cls-best-20240617-120845/model.pt"
 
     filetype = infile.split('.')[-1]
     base_filename = infile.split('/')[-1].replace(f'.{filetype}', '')
