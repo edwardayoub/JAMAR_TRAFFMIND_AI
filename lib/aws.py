@@ -217,9 +217,16 @@ def convert_lines_to_vectors(lines_json):
     return vectors
 
 def write_vectors_to_s3(vectors, bucket, key):
+    l = []
     print(f"Writing vectors to S3: {bucket}/{key}")
     s3_client = boto3.client('s3')
-    s3_client.put_object(Body=str(vectors), Bucket=bucket, Key=key)
+    for direction,point_pair in vectors.items():
+        l.append(f"{point_pair[0][0]},{point_pair[0][1]},{direction}")
+        l.append(f"{point_pair[1][0]},{point_pair[1][1]},{direction}")
+
+    out = "\n".join(l)
+
+    s3_client.put_object(Body=out, Bucket=bucket, Key=key)
 
 
 
