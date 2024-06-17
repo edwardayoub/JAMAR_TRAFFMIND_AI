@@ -8,7 +8,7 @@ st.set_page_config(page_title="TraffMind AI Traffic Counter", layout="wide")
 st.header("TraffMind AI Traffic Counter")
 
 # Manage initial load and refresh with session state
-if 'first_load' not in st.session_state:
+if 'first_load' not in st.session_state or 'names' not in st.session_state or 'name_to_key' not in st.session_state:
     name_to_key = {}
     names = list_files_paginated("jamar","outputs/", file_type='txt')
     # get just file names
@@ -27,6 +27,9 @@ count_file_name = st.selectbox("Select a count file", st.session_state.get('name
 
 if count_file_name:
     # download the file from s3
+    if not st.session_state.get('name_to_key', False):
+        st.rerun()
+
     key = st.session_state['name_to_key'][count_file_name]
     download_file("jamar", key, count_file_name)
 
