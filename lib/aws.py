@@ -221,8 +221,8 @@ def write_vectors_to_s3(vectors, bucket, key):
     print(f"Writing vectors to S3: {bucket}/{key}")
     s3_client = boto3.client('s3')
     for direction,point_pair in vectors.items():
-        l.append(f"{point_pair[0][0]},{point_pair[0][1]},{direction}")
-        l.append(f"{point_pair[1][0]},{point_pair[1][1]},{direction}")
+        l.append(f"{int(point_pair[0][0])},{int(point_pair[0][1])},{direction}")
+        l.append(f"{int(point_pair[1][0])},{int(point_pair[1][1])},{direction}")
 
     out = "\n".join(l)
 
