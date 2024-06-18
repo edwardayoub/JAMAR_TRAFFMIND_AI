@@ -86,8 +86,8 @@ else:
     logger.warning(f"setting to default width: {width}, height: {height}")
 
 logger.warning(f"about to draw canvas")
-logger.warning(f"bg_image is not None: {bg_image is not None}")
-logger.warning(f"bg_image session state is not None: {st.session_state.get('bg_image', False)}")
+logger.warning(f"bg_image value: {bg_image}")
+logger.warning(f"bg_image session statevalue: {st.session_state.get('bg_image', None)}")
 if st.session_state.get('bg_image', False):
     canvas_result = st_canvas(
         fill_color="rgba(255, 165, 0, 0.3)",
