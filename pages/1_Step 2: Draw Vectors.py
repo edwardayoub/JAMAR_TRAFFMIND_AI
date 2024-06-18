@@ -88,52 +88,51 @@ else:
 logger.warning(f"about to draw canvas")
 logger.warning(f"bg_image value: {bg_image}")
 logger.warning(f"bg_image session statevalue: {st.session_state.get('bg_image', None)}")
-if st.session_state.get('bg_image', False):
-    canvas_result = st_canvas(
-        fill_color="rgba(255, 165, 0, 0.3)",
-        stroke_width=stroke_width,
-        stroke_color='Black',
-        background_color="#ffffff",
-        background_image=st.session_state.get('bg_image', None),
-        update_streamlit=True,
-        width=width,
-        height=height,
-        drawing_mode=drawing_mode,
-        display_toolbar=True,
-        key=st.session_state['bg_video_name'] if st.session_state.get('bg_video_name', False) else "canvas"
-    )
+canvas_result = st_canvas(
+    fill_color="rgba(255, 165, 0, 0.3)",
+    stroke_width=stroke_width,
+    stroke_color='Black',
+    background_color="#000000",
+    background_image=st.session_state.get('bg_image'),
+    update_streamlit=True,
+    width=width,
+    height=height,
+    drawing_mode=drawing_mode,
+    display_toolbar=True,
+    key=st.session_state['bg_video_name'] if st.session_state.get('bg_video_name', False) else "canvas"
+)
 
 
-    if canvas_result.json_data is not None and canvas_result.json_data['objects'] != []:
-        vectors = convert_lines_to_vectors(canvas_result.json_data['objects'])
-        st.session_state['vectors'] = vectors
+if canvas_result.json_data is not None and canvas_result.json_data['objects'] != []:
+    vectors = convert_lines_to_vectors(canvas_result.json_data['objects'])
+    st.session_state['vectors'] = vectors
 
+    for i, (x1, y1, x2, y2) in enumerate(vectors):
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.write(f":blue[Vector {i + 1}]")
+        with col2:
+            directions_list = ["N", "S", "E", "W"]
+            option = None
+            option = st.selectbox(f"Vector {i + 1} Direction", directions_list, key=f"direction_{i}")
+            if option:
+                handle_click(option, i )
+    # Display the selected direction for each row
+    if st.button("Save vectors and submit job"):
+        file_type = st.session_state.get('bg_video_name').split('.')[-1]
+
+        v = {}
+        # make a dictionary of directions to vectors
         for i, (x1, y1, x2, y2) in enumerate(vectors):
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.write(f":blue[Vector {i + 1}]")
-            with col2:
-                directions_list = ["N", "S", "E", "W"]
-                option = None
-                option = st.selectbox(f"Vector {i + 1} Direction", directions_list, key=f"direction_{i}")
-                if option:
-                    handle_click(option, i )
-        # Display the selected direction for each row
-        if st.button("Save vectors and submit job"):
-            file_type = st.session_state.get('bg_video_name').split('.')[-1]
+            v[st.session_state.get(f'button_{i}')] = ((x1, y1), (x2, y2))
+        
+        write_vectors_to_s3(v, "jamar", f'submissions/{st.session_state.get("bg_video_name").replace("." + file_type, "")}/vectors.txt')
 
-            v = {}
-            # make a dictionary of directions to vectors
-            for i, (x1, y1, x2, y2) in enumerate(vectors):
-                v[st.session_state.get(f'button_{i}')] = ((x1, y1), (x2, y2))
-            
-            write_vectors_to_s3(v, "jamar", f'submissions/{st.session_state.get("bg_video_name").replace("." + file_type, "")}/vectors.txt')
-
-            # Run the processing job
-            run(st.session_state.get("bg_video_name"))
-            st.write(f"Vectors saved!")
-            st.write(f"Job submitted!")
+        # Run the processing job
+        run(st.session_state.get("bg_video_name"))
+        st.write(f"Vectors saved!")
+        st.write(f"Job submitted!")
 
 
 
