@@ -71,6 +71,8 @@ if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.ses
 
             # clear the canvas
             st.session_state['canvas_result'] = None
+    else:
+        logger.warning(f"bg_video_name is None, not extracting frame")
 
 
 if bg_image:
@@ -84,6 +86,8 @@ else:
     logger.warning(f"setting to default width: {width}, height: {height}")
 
 logger.warning(f"about to draw canvas")
+logger.warning(f"bg_image is not None: {bg_image is not None}")
+logger.warning(f"bg_image session state is not None: {st.session_state.get('bg_image', False)}")
 if st.session_state.get('bg_image', False):
     canvas_result = st_canvas(
         fill_color="rgba(255, 165, 0, 0.3)",
