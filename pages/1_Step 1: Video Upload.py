@@ -34,9 +34,9 @@ st.image("https://raw.githubusercontent.com/edwardayoub/JAMAR_TRAFFMIND_AI/main/
 st.markdown("""
 3. **Upload Your Video**:
     - Once logged in, drag and drop your video file into Cyberduck to upload.
-
-    ![Upload Your Video](https://raw.githubusercontent.com/edwardayoub/JAMAR_TRAFFMIND_AI/main/screenshots/traffmind_sftp_files.png)
 """)
+
+st.image("https://raw.githubusercontent.com/edwardayoub/JAMAR_TRAFFMIND_AI/main/screenshots/traffmind_sftp_files.png", width=600)
 
 # Link to check status
 st.markdown("""
