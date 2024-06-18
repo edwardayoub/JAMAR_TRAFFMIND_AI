@@ -9,19 +9,9 @@ logger = logging.getLogger(st.__name__)
 
 # Function to handle button clicks
 def handle_click(direction, index):
-    logger.warning(f"Button {index} clicked with direction {direction}")
     st.session_state[f"button_{index}"] = direction
 
-color_map = {
-    0: "blue",
-    1: "red",
-    2: "green",
-    3: "white",
-}
-
 st.set_page_config(page_title="TraffMind AI Traffic Counter", layout="wide")
-
-drawing_mode = "line"
 
 st.header("TraffMind AI Draw Vectors")
 
@@ -41,8 +31,7 @@ bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_sta
 
 @st.cache_data
 def get_first_frame(video_name):
-    frame = extract_first_frame("jamar", f"client_upload/{video_name}")
-    return frame
+    return extract_first_frame("jamar", f"client_upload/{video_name}")
 
 @st.cache_data
 def get_image_from_frame(frame):
@@ -72,7 +61,7 @@ canvas_result = st_canvas(
     update_streamlit=True,
     width=width,
     height=height,
-    drawing_mode=drawing_mode,
+    drawing_mode="line",
     display_toolbar=True,
     key='canvas'
 )
@@ -94,11 +83,8 @@ if canvas_result.json_data is not None and canvas_result.json_data['objects']:
 
     if st.button("Save vectors and submit job"):
         file_type = st.session_state['bg_video_name'].split('.')[-1]
-
         v = {st.session_state[f'button_{i}']: ((x1, y1), (x2, y2)) for i, (x1, y1, x2, y2) in enumerate(vectors)}
-        
         write_vectors_to_s3(v, "jamar", f'submissions/{st.session_state["bg_video_name"].replace("." + file_type, "")}/vectors.txt')
-
         run(st.session_state["bg_video_name"])
         st.write("Vectors saved!")
         st.write("Job submitted!")
