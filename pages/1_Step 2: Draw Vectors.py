@@ -26,20 +26,18 @@ drawing_mode = "line"
 st.header("TraffMind AI Draw Vectors")
 
 # Manage initial load and refresh with session state
-if 'vector_first_load' not in st.session_state:
+if 'vector_names' not in st.session_state:
     names = list_files_paginated("jamar", "client_upload/", file_type='*')
-    names = [name.split('/')[-1] for name in names]
-    st.session_state['vector_first_load'] = True
-    st.session_state['vector_names'] = names
+    st.session_state['vector_names'] = [name.split('/')[-1] for name in names]
 
 refresh = st.button('Refresh Videos', key='refresh')
 
 if refresh:
     names = list_files_paginated("jamar", "client_upload/", file_type='*')
-    st.session_state['vector_names'] = names
+    st.session_state['vector_names'] = [name.split('/')[-1] for name in names]
 
 # Dropdown for selecting a background image
-bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state.get('vector_names', []))
+bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state['vector_names'])
 
 @st.cache_data
 def get_first_frame(video_name):
@@ -50,13 +48,14 @@ def get_first_frame(video_name):
 def get_image_from_frame(frame):
     return Image.fromarray(frame)
 
-if bg_video_name and (st.session_state.get('bg_video_name') != bg_video_name):
-    frame = get_first_frame(bg_video_name)
-    if frame is not None:
-        bg_image = get_image_from_frame(frame)
-        st.session_state['bg_image'] = bg_image
-        st.session_state['bg_video_name'] = bg_video_name
-        st.session_state['canvas_result'] = None  # Clear canvas
+if bg_video_name:
+    if 'bg_video_name' not in st.session_state or st.session_state['bg_video_name'] != bg_video_name:
+        frame = get_first_frame(bg_video_name)
+        if frame is not None:
+            bg_image = get_image_from_frame(frame)
+            st.session_state['bg_image'] = bg_image
+            st.session_state['bg_video_name'] = bg_video_name
+            st.session_state['canvas_result'] = None  # Clear canvas
 
 if 'bg_image' in st.session_state:
     bg_image = st.session_state['bg_image']
