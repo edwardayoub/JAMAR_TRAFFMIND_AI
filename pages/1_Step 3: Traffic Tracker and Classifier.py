@@ -1,5 +1,7 @@
+import os
 import streamlit as st
 from lib import get_s3_status
+
 region = 'us-east-2'
 access_key = os.getenv("AWS_ACCESS_KEY_ID")
 secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
