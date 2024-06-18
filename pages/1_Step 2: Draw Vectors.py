@@ -27,7 +27,7 @@ drawing_mode ="line"
 st.header("TraffMind AI Draw Vectors")
 
 # Manage initial load and refresh with session state
-if 'first_load' not in st.session_state:
+if 'first_load' not in st.session_state or not st.session_state.get('names', False):
     names = list_files_paginated("jamar","client_upload/", file_type='*')
     # get just file names
     names = [name.split('/')[-1] for name in names]
@@ -85,7 +85,6 @@ else:
 
 logger.warning(f"about to draw canvas")
 if st.session_state.get('bg_image', False):
-    logger.warning(f"Drawing canvas")
     canvas_result = st_canvas(
         fill_color="rgba(255, 165, 0, 0.3)",
         stroke_width=stroke_width,
