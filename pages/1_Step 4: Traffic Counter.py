@@ -52,13 +52,25 @@ if count_file_name:
 
             for i, movement_dict in enumerate(movement_dict_list):
                 for class_number in range(1, 7):
-                    row = {'From': f"{minute_increment * i} min", 'To': f"{minute_increment * (i + 1)} min",'class': class_number}
+                    if class_number == 1:
+                        row = {'From': f"{minute_increment * i} min", 'To': f"{minute_increment * (i + 1)} min",'class': class_number}
+                    else:
+                        row = {'From': '', 'To': '', 'class': class_number}
                     for feature, counts_dict in movement_dict.items():
                         row[feature] = counts_dict.get(class_number, 0)
                     rows.append(row)
             final_df = pd.DataFrame(rows)
 
-            st.write(final_df)
+            # convert na to 0
+            final_df = final_df.fillna(0)
+            # convert all columns except From and To to int
+            for col in final_df.columns:
+                if col not in ['From', 'To']:
+                    final_df[col] = final_df[col].astype(int)
+
+            n_rows = final_df.shape[0]
+
+            st.dataframe(final_df.style.hide(axis="index"), hide_index=True, height = int(35.2*(n_rows+1)), width=1000)
     except Exception as e:
         st.error(f"Error loading counts file: {e}")
 
