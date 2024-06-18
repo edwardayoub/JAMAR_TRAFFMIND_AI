@@ -89,6 +89,9 @@ def get_s3_status(tag_key, tag_value, region, access_key, secret_key):
     df['Start Time'] = pd.to_datetime(df['Start Time']).dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
     df['End Time'] = df['End Time'].apply(lambda x: pd.to_datetime(x).tz_convert(est).strftime('%Y-%m-%d %I:%M %p') if pd.notnull(x) else None)
     
+    df['Start Time'] = pd.to_datetime(df['Start Time'], format='%Y-%m-%d %I:%M %p')
+    df['End Time'] = pd.to_datetime(df['End Time'], format='%Y-%m-%d %I:%M %p', errors='coerce')
+    
     return df.sort_values(by=['Start Time'], ascending=False)
 
 def show_table_with_links(df):
