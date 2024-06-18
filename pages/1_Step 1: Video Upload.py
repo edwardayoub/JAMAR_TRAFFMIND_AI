@@ -10,13 +10,11 @@ st.set_page_config(layout="wide")
 # Header
 st.header("TraffMind AI Job Submission")
 
-# Step 1: Upload Video Using SFTP
+
 st.markdown("""
-**1. Upload Video Using SFTP**
+### Upload Video Using SFTP
 
 You can now upload your videos using an SFTP client such as Cyberduck. Follow the steps below:
-
-### Step-by-Step Guide
 
 1. **Download Cyberduck**:
     - Go to the [Cyberduck website](https://cyberduck.io/download/) and download the version suitable for your operating system.
