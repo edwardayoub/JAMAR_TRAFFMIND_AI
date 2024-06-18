@@ -1,5 +1,8 @@
 import streamlit as st
 from lib import get_s3_status
+access_key = os.getenv("AWS_ACCESS_KEY_ID")
+secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+
 def show_table_with_links(df):
     # Convert DataFrame to HTML, replacing text URL with an HTML link
     df['Download Link'] = df['Download Link'].apply(lambda x: f'<a href="{x}" target="_blank">Download</a>' if x is not None else "")
