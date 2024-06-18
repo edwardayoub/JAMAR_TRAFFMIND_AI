@@ -27,9 +27,11 @@ You can now upload your videos using an SFTP client such as Cyberduck. Follow th
     - Username: `sftp-access-s3`
     - Password: Leave this blank.
     - SSH Private Key: Use the private key we provided to you.
-    
-    <img src="https://raw.githubusercontent.com/edwardayoub/JAMAR_TRAFFMIND_AI/main/screenshots/traffmind_sftp_login.png" width="600">
+    """)
 
+st.image("https://raw.githubusercontent.com/edwardayoub/JAMAR_TRAFFMIND_AI/main/screenshots/traffmind_sftp_login.png", width=600)
+
+st.markdown("""
 3. **Upload Your Video**:
     - Once logged in, drag and drop your video file into Cyberduck to upload.
 
