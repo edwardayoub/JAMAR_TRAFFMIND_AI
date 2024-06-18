@@ -85,12 +85,12 @@ def get_s3_status(tag_key, tag_value, region, access_key, secret_key):
         return pd.DataFrame(columns=['File Name', 'Start Time', 'End Time', 'Duration (hrs)', 'Status', 'Download Link'])
 
     df = pd.DataFrame(filtered_jobs)
-    est = timezone('America/New_York')
+    est = timezone('America/New_York')    
     df['Start Time'] = pd.to_datetime(df['Start Time']).dt.tz_convert(est).dt.strftime('%Y-%m-%d %I:%M %p')
+    df.sort_values(by=['Start Time'], ascending=False)
     df['End Time'] = df['End Time'].apply(lambda x: pd.to_datetime(x).tz_convert(est).strftime('%Y-%m-%d %I:%M %p') if pd.notnull(x) else None)
+    return df
     
-    return df.sort_values(by=['Start Time'], ascending=False)
-
 def show_table_with_links(df):
     df['Download Link'] = df['Download Link'].apply(lambda x: f'<a href="{x}" target="_blank">Download</a>' if x is not None else "")
     st.write(df.to_html(escape=False, index=False), unsafe_allow_html=True)
