@@ -27,18 +27,18 @@ drawing_mode ="line"
 st.header("TraffMind AI Draw Vectors")
 
 # Manage initial load and refresh with session state
-if 'first_load' not in st.session_state or not st.session_state.get('names', False):
+if 'vector_first_load' not in st.session_state or not st.session_state.get('vector_names', False):
     names = list_files_paginated("jamar","client_upload/", file_type='*')
     # get just file names
     names = [name.split('/')[-1] for name in names]
-    st.session_state['first_load'] = True
-    st.session_state['names'] = names
+    st.session_state['vector_first_load'] = True
+    st.session_state['vector_names'] = names
 
 refresh = st.button('Refresh Videos', key='refresh')
 
 
 # Dropdown for selecting a background image
-bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state.get('names', []))
+bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state.get('vector_names', []))
 
 # Set page configuration
 stroke_width = 3
@@ -135,11 +135,11 @@ if st.session_state.get('bg_image', False):
 
 
 # Auto-refresh on the initial load or when the refresh button is pressed
-if 'first_load' not in st.session_state or refresh:
+if 'vector_first_load' not in st.session_state or refresh:
     try:
         names = list_files_paginated("jamar","client_upload/", file_type='*')
-        st.session_state['names'] = names
-        st.session_state['first_load'] = False
+        st.session_state['vector_names'] = names
+        st.session_state['vector_first_load'] = False
     except Exception as e:
         st.error(f"An error occurred: {e}")
         st.error(f"No jobs have been submitted yet. Please submit a job to view processed videos.")
