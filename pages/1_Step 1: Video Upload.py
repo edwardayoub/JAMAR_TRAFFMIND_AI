@@ -19,39 +19,26 @@ You can now upload your videos using an SFTP client such as Cyberduck. Follow th
     - Go to the [Cyberduck website](https://cyberduck.io/download/) and download the version suitable for your operating system.
     - Install Cyberduck following the instructions provided on the website.
 
-    *Screenshots Placeholder*
-
 2. **Login to SFTP Server**:
     - Open Cyberduck.
     - Click on "Open Connection".
     - Select "SFTP (SSH File Transfer Protocol)" from the dropdown menu.
-
-    *Screenshots Placeholder*
-
-3. **Enter Login Details**:
-    - Server: `YOUR_SFTP_SERVER`
-    - Username: `YOUR_USERNAME`
+    - Server: `s-98f5aabd378c4fbf8.server.transfer.us-east-2.amazonaws.com`
+    - Username: `sftp-access-s3`
     - Password: Leave this blank.
     - SSH Private Key: Use the private key we provided to you.
 
-    *Screenshots Placeholder*
+    ![Open Connection](screenshots/traffmind_sftp_login.png)
 
-4. **Upload Your Video**:
-    - Once logged in, navigate to the folder where you want to upload your video.
-    - Drag and drop your video file into Cyberduck to upload.
+3. **Upload Your Video**:
+    - Once logged in, drag and drop your video file into Cyberduck to upload.
 
-    *Screenshots Placeholder*
-
-5. **Confirmation**:
-    - After the upload is complete, you will receive a confirmation email.
-    - You can also check the status of your upload on the TraffMind AI portal.
-
-    *Screenshots Placeholder*
+    ![Upload Your Video](screenshots/traffmind_sftp_files.png)
 """)
 
 # Link to check status
 st.markdown("""
-**2. Draw Vectors**: Before submitting the job, you can draw vectors on the video to track vehicles.
+**4. Draw Vectors**: Before submitting the job, you can draw vectors on the video to track vehicles.
 """)
 
 st.page_link(
