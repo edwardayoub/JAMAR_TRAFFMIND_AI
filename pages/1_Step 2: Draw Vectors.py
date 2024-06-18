@@ -7,83 +7,53 @@ import logging
 
 logger = logging.getLogger(st.__name__)
 
-
 # Function to handle button clicks
 def handle_click(direction, index):
-    logger.warning(f"Button {index} clicked with direction {direction}")
     st.session_state[f"button_{index}"] = direction
-
-color_map = {
-    0: "blue",
-    1: "red",
-    2: "green",
-    3: "white",
-    }
 
 st.set_page_config(page_title="TraffMind AI Traffic Counter", layout="wide")
 
-drawing_mode ="line"
-
 st.header("TraffMind AI Draw Vectors")
+stroke_width = 3
+drawing_mode = "line"
+bg_image = None
 
 # Manage initial load and refresh with session state
-if 'vector_first_load' not in st.session_state or not st.session_state.get('vector_names', False):
-    names = list_files_paginated("jamar","client_upload/", file_type='*')
-    # get just file names
-    names = [name.split('/')[-1] for name in names]
-    st.session_state['vector_first_load'] = True
-    st.session_state['vector_names'] = names
+if 'vector_names' not in st.session_state:
+    names = list_files_paginated("jamar", "client_upload/", file_type='*')
+    st.session_state['vector_names'] = [name.split('/')[-1] for name in names]
 
 refresh = st.button('Refresh Videos', key='refresh')
 
+if refresh:
+    names = list_files_paginated("jamar", "client_upload/", file_type='*')
+    st.session_state['vector_names'] = [name.split('/')[-1] for name in names]
 
 # Dropdown for selecting a background image
-bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state.get('vector_names', []))
-
-# Set page configuration
-stroke_width = 3
-
-bg_image = None
-canvas_result = None
+bg_video_name = st.selectbox("Select a video to draw vectors on", st.session_state['vector_names'])
 
 @st.cache_data
 def get_first_frame(video_name):
-    logger.warning(f"Extracting first frame from {video_name}")
-    logger.warning(f"{video_name}")
-    frame = extract_first_frame("jamar", f"client_upload/{video_name}")
-    logger.warning(f"Frame extracted, frame is not None: {frame is not None}")
-    return frame
+    return extract_first_frame("jamar", f"client_upload/{video_name}")
 
 @st.cache_data
 def get_image_from_frame(frame):
     return Image.fromarray(frame)
-    
 
-if (st.session_state.get('bg_video_name', False) != bg_video_name) or not st.session_state.get('bg_image', False):
-    if bg_video_name:
+if bg_video_name:
+    if 'bg_video_name' not in st.session_state or st.session_state['bg_video_name'] != bg_video_name:
         frame = get_first_frame(bg_video_name)
-
         if frame is not None:
             bg_image = get_image_from_frame(frame)
-
             st.session_state['bg_image'] = bg_image
             st.session_state['bg_video_name'] = bg_video_name
+            st.session_state['canvas_result'] = None  # Clear canvas
 
-            # clear the canvas
-            st.session_state['canvas_result'] = None
-    else:
-        logger.warning(f"bg_video_name is None, not extracting frame")
-
-
-if bg_image:
+if 'bg_image' in st.session_state:
+    bg_image = st.session_state['bg_image']
     width, height = bg_image.size
-    logger.warning(f"width: {width}, height: {height}")
-elif st.session_state.get('bg_image', False):
-    width, height = st.session_state['bg_image'].size
-    logger.warning(f"width: {width}, height: {height}")
 else:
     width, height = 800, 800
-    logger.warning(f"setting to default width: {width}, height: {height}")
 
 logger.warning(f"about to draw canvas")
 logger.warning(f"bg_image value: {bg_image}")
@@ -134,26 +104,9 @@ if canvas_result.json_data is not None and canvas_result.json_data['objects'] !=
         st.write(f"Vectors saved!")
         st.write(f"Job submitted!")
 
-
-
-
-# Auto-refresh on the initial load or when the refresh button is pressed
-if 'vector_first_load' not in st.session_state or refresh:
-    try:
-        names = list_files_paginated("jamar","client_upload/", file_type='*')
-        st.session_state['vector_names'] = names
-        st.session_state['vector_first_load'] = False
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
-        st.error(f"No jobs have been submitted yet. Please submit a job to view processed videos.")
-        st.stop()
-
-
-# Link to check status
 st.markdown("""
 **3. Check Status**: Click the following link to check the status of your submission.
 """)
-
 st.page_link(
     "pages/1_Step 3: Traffic Tracker and Classifier.py",
     label=":blue[Step 3: Traffic Tracker and Classifier]",
