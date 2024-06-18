@@ -1,7 +1,5 @@
 import streamlit as st
 import logging
-import os
-import streamlit.components.v1 as components
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -10,23 +8,39 @@ logger = logging.getLogger(__name__)
 st.set_page_config(layout="wide")
 
 # Header
-st.header("TraffMind AI Job Submission")
+st.header("TraffMind AI Video Upload Using SFTP")
 
-# Step 1: Select a video
+
 st.markdown("""
-**1. Select a Video**: Upload a video file to start the job submission process. Only MP4 and h264 formats are supported.
+
+You can now upload your videos using an SFTP client such as Cyberduck. Follow the steps below:
+
+1. **Download Cyberduck**:
+    - Go to the [Cyberduck website](https://cyberduck.io/download/) and download the version suitable for your operating system.
+    - Install Cyberduck following the instructions provided on the website.
+
+2. **Login to SFTP Server**:
+    - Open Cyberduck.
+    - Click on "Open Connection".
+    - Select "SFTP (SSH File Transfer Protocol)" from the dropdown menu.
+    - Server: `s-98f5aabd378c4fbf8.server.transfer.us-east-2.amazonaws.com`
+    - Username: `sftp-access-s3`
+    - Password: Leave this blank.
+    - SSH Private Key: Use the private key we provided to you.
+    """)
+
+st.image("https://raw.githubusercontent.com/edwardayoub/JAMAR_TRAFFMIND_AI/main/screenshots/traffmind_sftp_login.png", width=600)
+
+st.markdown("""
+3. **Upload Your Video**:
+    - Once logged in, drag and drop your video file into Cyberduck to upload.
 """)
 
-# Iframe for file upload and submission
-components.iframe("https://traffmind-upload-ui.s3.us-east-2.amazonaws.com/index.html", height=125)
-
-# Placeholder to capture the file name from the iframe
-uploaded_video_name = st.empty()
-
+st.image("https://raw.githubusercontent.com/edwardayoub/JAMAR_TRAFFMIND_AI/main/screenshots/traffmind_sftp_files.png", width=600)
 
 # Link to check status
 st.markdown("""
-**2. Draw Vectors**: Before submitting the job, you can draw vectors on the video to track vehicles.
+**4. Draw Vectors**: Before submitting the job, you can draw vectors on the video to track vehicles.
 """)
 
 st.page_link(
