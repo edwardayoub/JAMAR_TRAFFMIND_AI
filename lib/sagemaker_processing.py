@@ -39,7 +39,7 @@ def start_sagemaker_processing_job(infile, machine, environment_variables):
     filetype = infile.split('.')[-1]
     base_filename = infile.split('/')[-1].replace(f'.{filetype}', '')
     input_path = f's3://{bucket}/client_upload/{infile}'
-    output_path = f's3://{bucket}/outputs/{base_filename}'
+    output_path = f's3://{bucket}/outputs/{base_filename}_{datetime_str}'
     tracks_output_path = f'{output_path}/tracks/'
 
     epoch_time = int(time.time())
