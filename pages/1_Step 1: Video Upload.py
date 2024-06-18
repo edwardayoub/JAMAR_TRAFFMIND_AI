@@ -8,11 +8,10 @@ logger = logging.getLogger(__name__)
 st.set_page_config(layout="wide")
 
 # Header
-st.header("TraffMind AI Job Submission")
+st.header("TraffMind AI Video Upload Using SFTP")
 
 
 st.markdown("""
-### Upload Video Using SFTP
 
 You can now upload your videos using an SFTP client such as Cyberduck. Follow the steps below:
 
