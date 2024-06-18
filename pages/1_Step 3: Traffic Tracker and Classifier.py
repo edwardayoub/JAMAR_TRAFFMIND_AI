@@ -30,7 +30,7 @@ if 'first_load' not in st.session_state:
 # Auto-refresh on the initial load or when the refresh button is pressed
 if 'first_load' not in st.session_state or refresh:
     try:
-        data_df = get_s3_status()
+        data_df = get_s3_status('Client', 'Jamar', region, access_key, secret_key)
         show_table_with_links(data_df)
         st.session_state['first_load'] = False
     except Exception as e:
