@@ -69,7 +69,7 @@ canvas_result = st_canvas(
     height=height,
     drawing_mode=drawing_mode,
     display_toolbar=True,
-    key=st.session_state['bg_video_name'] if st.session_state.get('bg_video_name', False) else "canvas"
+    key=st.session_state['bg_video_name'] + 'canvas' if st.session_state.get('bg_video_name', False) else "canvas"
 )
 
 
