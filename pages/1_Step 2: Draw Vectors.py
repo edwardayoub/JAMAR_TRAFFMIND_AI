@@ -41,6 +41,7 @@ def get_image_from_frame(frame):
     return Image.fromarray(frame)
 
 if bg_video_name:
+    logger.warning(f"line 44, calling get image from frame: {bg_video_name}")
     if 'bg_video_name' not in st.session_state or st.session_state['bg_video_name'] != bg_video_name:
         frame = get_first_frame(bg_video_name)
         if frame is not None:
