@@ -19,7 +19,7 @@ Released on June 17, 2024, Version 1.2 of the TraffMind AI JAMAR Portal introduc
 
 ### **4- Quality Control Assurance**
 
-- **Application**: Ensures the accuracy and reliability of automated systems through manual verification. By processing over 200 hours of real job footage and manually counting 15 minutes of each location, this feature provides a high level of confidence in the system's automated counts.
+- **Application**: Ensures the accuracy and reliability of automated systems through manual verification. By processing over 250 hours of real job footage and manually counting 15 minutes of each location, this feature provides a high level of confidence in the system's automated counts.
 - **Technology**: The quality control process involves a meticulous manual verification procedure where trained analysts count vehicles manually on selected footage. This data is then compared with the automated counts to identify and correct discrepancies. This rigorous approach ensures that the system maintains high accuracy standards and builds trust among users regarding the reliability of the data provided.
 
 TraffMind AI JAMAR Portal V1.2 introduces critical enhancements and new features that significantly improve traffic data analysis capabilities. By building on the robust foundation of previous versions, V1.2 provides a more reliable, efficient, and detailed traffic management toolset, empowering users to derive actionable insights from complex traffic data.
