@@ -1,20 +1,25 @@
-# TraffMind AI JAMAR Portal V1.1
+# TraffMind AI JAMAR Portal V1.2
 
-Released on May 9, 2024, Version 1.1 of the TraffMind AI JAMAR Portal introduces further enhancements and new features that build on the solid foundation established in V1.0. This update brings advanced categorization capabilities and environmental context to our state-of-the-art video traffic analysis technology, further enriching the insights derived from traffic data and promoting more effective urban mobility management.
+Released on June 17, 2024, Version 1.2 of the TraffMind AI JAMAR Portal introduces significant improvements and new features to our advanced video traffic analysis platform. This version builds on the strengths of previous releases and adds powerful tools to enhance traffic data analysis and urban mobility management.
 
-### **1- Enhanced Traffic Detection and Classification**
+### **1- Enhanced Detector, Classifier, and GPU Processing**
 
-- **Application**: This updated feature extends the basic vehicle detection capabilities from V1.0 by not only detecting but also classifying vehicles into six distinct categories using the comprehensive 6 Bins Classifier. This categorization is crucial for traffic studies that require detailed analysis of vehicle types for urban planning and traffic regulation.
-- **Technology**: Integrates sophisticated classification algorithms with the detection process, enabling the immediate categorization of detected vehicles based on their type and characteristics, enhancing the granularity of traffic data analysis.
+- **Application**: Offers iterative improvements to detection and classification algorithms, combined with a transition to GPU processors for faster processing. This enhancement ensures that traffic data is analyzed with greater accuracy and speed.
+- **Technology**: The enhanced detector and classifier use state-of-the-art deep learning models that have been trained on extensive datasets to improve the detection and classification of vehicles. These models are now processed on powerful GPU servers, which significantly reduce the time required for analysis. The system can handle up to 10 processing jobs in parallel, increasing overall efficiency and allowing for real-time traffic data processing.
 
-### **2- Weather Impact Analysis on Traffic Conditions**
+### **2- Vector Counter**
 
-- **Application**: New to V1.1, this feature analyzes how different weather conditions affect traffic behavior and flow. It’s essential for adaptive traffic management systems that need to optimize traffic flow and ensure safety under varying environmental conditions.
-- **Technology**: Utilizes real-time weather data integration to assess and predict the impact of weather on traffic, providing traffic managers with actionable insights to adjust traffic control measures promptly.
+- **Application**: Allows users to draw lines defining the turning movements they are interested in. This feature is particularly useful for traffic engineers and urban planners who need to analyze specific turning movements at intersections to optimize traffic flow.
+- **Technology**: The Vector Counter utilizes advanced graphical interfaces that enable users to draw and customize vectors directly on the traffic footage. These vectors are then used to identify and count turning movements, providing precise data for traffic studies. The system is highly adaptable, allowing for adjustments in vector placement and settings to meet various analytical needs.
 
-### **3- Single Picture Detection and Classification**
+### **3- Improved Upload Solution**
 
-- **Application**: Also new in this release, the Single Picture Detection and Classification feature allows for the instant processing of vehicles from a single image. This dual functionality is particularly useful for static and snapshot traffic analysis, where quick, on-the-spot data processing is needed.
-- **Technology**: Leverages the same advanced machine learning models used in our tracking and classification systems, adapted to provide accurate vehicle detection and classification from single-frame inputs.
+- **Application**: This feature addresses and resolves previous upload bugs by implementing an improved upload solution using SFTP with AWS S3. Users can now experience a smoother and more reliable upload process, eliminating the frustrations and limitations encountered with earlier versions.
+- **Technology**: The new upload solution leverages the secure and scalable capabilities of SFTP integrated with AWS S3 storage. This combination ensures data integrity and security while allowing users to easily drag and drop their files for upload. The system is designed to handle large volumes of data efficiently, providing a robust and user-friendly experience.
 
-TraffMind AI JAMAR Portal V1.1 enhances the capabilities introduced in V1.0 by adding detailed vehicle classification and environmental analysis tools. These new features enable users to undertake more comprehensive traffic studies, incorporating vehicle type analysis and environmental factors into their traffic management strategies. By expanding the scope of detectable and analyzable elements within traffic data, V1.1 offers users an even more powerful toolset for enhancing urban traffic systems.
+### **4- Quality Control Assurance**
+
+- **Application**: Ensures the accuracy and reliability of automated systems through manual verification. By processing over 200 hours of real job footage and manually counting 15 minutes of each location, this feature provides a high level of confidence in the system's automated counts.
+- **Technology**: The quality control process involves a meticulous manual verification procedure where trained analysts count vehicles manually on selected footage. This data is then compared with the automated counts to identify and correct discrepancies. This rigorous approach ensures that the system maintains high accuracy standards and builds trust among users regarding the reliability of the data provided.
+
+TraffMind AI JAMAR Portal V1.2 introduces critical enhancements and new features that significantly improve traffic data analysis capabilities. By building on the robust foundation of previous versions, V1.2 provides a more reliable, efficient, and detailed traffic management toolset, empowering users to derive actionable insights from complex traffic data.
