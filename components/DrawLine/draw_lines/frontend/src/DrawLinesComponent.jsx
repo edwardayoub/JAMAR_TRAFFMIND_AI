@@ -19,11 +19,13 @@ class LineDrawing extends StreamlitComponentBase {
     this.canvasRef = React.createRef()
   }
 
+  componentDidMount() {
+    this.drawInitialImage();
+  }
+
   componentDidUpdate(prevProps, prevState) {
 
-    if (prevState.currentImageIndex !== this.state.currentImageIndex) {
-      this.drawLines()
-    }
+
     if (this.state.lines !== prevState.lines) {
       this.drawLines()
     }
