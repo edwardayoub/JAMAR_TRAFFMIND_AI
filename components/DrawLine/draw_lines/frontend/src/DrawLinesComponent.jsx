@@ -10,14 +10,16 @@ class LineDrawing extends StreamlitComponentBase {
     super(props)
     this.state = {
       image: this.props.args["image"],
+      width: this.props.args["width"],
+      height: this.props.args["height"],
       lines: [],
       isDrawing: false,
     }
+    console.log(this.state.width, this.state.height);
     this.canvasRef = React.createRef()
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("componentDidUpdate")
 
     if (prevState.currentImageIndex !== this.state.currentImageIndex) {
       this.drawLines()
@@ -56,33 +58,30 @@ class LineDrawing extends StreamlitComponentBase {
   }
 
   drawLines = () => {
-    console.log("drawLines func")
     const canvas = this.canvasRef.current
     if (!canvas || !this.getCurrentImage()) return
     const ctx = canvas.getContext("2d")
     const currentImage = new Image()
 
     currentImage.onload = () => {
-      console.log("currentImage.onload");
-      canvas.width = currentImage.width;
-      canvas.height = currentImage.height;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(currentImage, 0, 0);
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = "black";
+      canvas.width = currentImage.width
+      canvas.height = currentImage.height
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(currentImage, 0, 0)
+      ctx.lineWidth = 2
+      ctx.strokeStyle = "black"
       this.state.lines.forEach((line) => {
-        console.log('line', line);
         if (line.end) {
-          console.log('line.end', line.end);
-          ctx.beginPath();
+          ctx.beginPath()
           ctx.moveTo(line.start.x, line.start.y)
           ctx.lineTo(line.end.x, line.end.y)
-          ctx.stroke();
+          ctx.stroke()
         }
       })
     }
 
     currentImage.src = `data:image/png;base64,${this.state.image}`
+    Streamlit.setComponentValue(this.state.lines)
   }
 
   getCurrentImage() {
@@ -90,15 +89,14 @@ class LineDrawing extends StreamlitComponentBase {
   }
 
   drawInitialImage = () => {
-    console.log("drawInitialImage")
     const canvas = this.canvasRef.current
 
     const ctx = canvas.getContext("2d")
-    const currentImage = new Image(400, 400)
+    const currentImage = new Image()
 
     currentImage.onload = () => {
-      canvas.width = currentImage.width
-      canvas.height = currentImage.height
+      canvas.width = currentImage.width;
+      canvas.height = currentImage.height;
       //ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(currentImage, 0, 0)
     }
@@ -112,45 +110,27 @@ class LineDrawing extends StreamlitComponentBase {
 
   render() {
     return (
-      <div style={{ textAlign: "center", height: "1000px" }}>
+      <div id="draw_lines_container" style={{ textAlign: "left", width: this.state.width, height: this.state.height }}>
         {this.state.image && (
           <>
-            {/* <img
-              src={`data:image/png;base64,${this.state.image}`}
-              alt="image"
-            /> */}
-
             <canvas
               ref={this.canvasRef}
-              backgroundColor="white"
               onMouseDown={this.handleMouseDown}
               onMouseMove={this.handleMouseMove}
               onMouseUp={this.handleMouseUp}
-              style={{ border: "3px solid black", cursor: "crosshair" }}
+              style={{
+                border: "3px solid black",
+                cursor: "crosshair",
+                height: this.state.image.height,
+                width: this.state.image.width,
+              }}
             />
             <button onClick={this.drawInitialImage}>Refresh</button>
-
-            {this.getCurrentImage() && (
-              <div style={{ textAlign: "left", height: "1000px" }}>
-                <h2>Line Segments:</h2>
-                <ul>
-                  {this.state.lines.map((line, index) => (
-                    <li key={index}>
-                      Start: ({line.start.x}, {line.start.y}) - End:{" "}
-                      {line.end
-                        ? `(${line.end.x}, {line.end.y})`
-                        : "Not finished"}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </>
         )}
       </div>
     )
   }
 }
-Streamlit.setFrameHeight(1350)
 
 export default withStreamlitConnection(LineDrawing)

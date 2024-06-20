@@ -48,6 +48,9 @@ if bg_video_name:
     if 'bg_video_name' not in st.session_state or st.session_state['bg_video_name'] != bg_video_name:
         frame = get_first_frame(bg_video_name)
         if frame is not None:
+            image_height, image_width, _ = frame.shape
+            st.session_state.image_height = image_height
+            st.session_state.image_width = image_width
             # convert array to bytes
             _, encoded_frame = cv2.imencode('.png', frame)
             bg_image = base64.b64encode(encoded_frame).decode('utf-8')
@@ -58,14 +61,16 @@ if bg_video_name:
 
 if 'bg_image' in st.session_state:
     print("Drawing lines")
-    lines = draw_lines(st.session_state.bg_image)
+    lines = draw_lines(st.session_state.bg_image, st.session_state.image_width, st.session_state.image_height)
 
 if lines is not None and lines != []:
+    print(lines)
     vectors = convert_lines_to_vectors(lines)
     st.session_state['vectors'] = vectors
 
     for i, (x1, y1, x2, y2) in enumerate(vectors):
         col1, col2 = st.columns(2)
+        print(f"Vector {i + 1}")
         
         with col1:
             st.write(f":blue[Vector {i + 1}]")

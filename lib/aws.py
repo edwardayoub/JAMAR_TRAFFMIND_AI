@@ -109,21 +109,25 @@ def send_discord_notification(file_name, file_size_mb, title, description, color
 
 def convert_lines_to_vectors(lines_json):
     vectors = []
+    if not lines_json:
+        return vectors
     for line in lines_json:
-        center_x = line['left']
-        center_y = line['top']
+        if not line:
+            continue
+        if 'start' not in line or 'end' not in line:
+            continue
 
-        x1 = line['x1']
-        y1 = line['y1']
-        x2 = line['x2']
-        y2 = line['y2']
+        if not line['start'] or not line['end']:
+            continue
 
-        # transform into proper coordinates
-        x1 = x1 + center_x
-        y1 = y1 + center_y
+        if 'x' not in line['start'] or 'y' not in line['start'] or 'x' not in line['end'] or 'y' not in line['end']:
+            continue
 
-        x2 = x2 + center_x
-        y2 = y2 + center_y
+        x1 = line['start']['x']
+        y1 = line['start']['y']
+
+        x2 = line['end']['x']
+        y2 = line['end']['y']
 
         vectors.append((x1, y1, x2, y2))
 
@@ -166,7 +170,6 @@ def extract_first_frame(bucket, key):
     # convert to RGB from BGR without opencv, just permute the channels
 
     if ret and frame is not None:
-        frame = frame[:, :, ::-1]
         return frame
     else:
         logger.warning(f'Failed to capture video from {url}')
