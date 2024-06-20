@@ -3,6 +3,7 @@ maxUploadSize=3000
 enableCORS = false
 enableXsrfProtection = false
 enableWebsocketCompression = false
+enableStaticServing = true
 
 [logger]
 
