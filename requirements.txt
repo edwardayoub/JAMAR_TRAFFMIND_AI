@@ -7,4 +7,4 @@ torch
 torchvision
 ultralytics
 supervision
-streamlit-draw-lines
+streamlit-draw-lines==0.0.2
