@@ -1,3 +1,4 @@
+opencv-python-headless
 boto3
 pandas
 tensorflow
