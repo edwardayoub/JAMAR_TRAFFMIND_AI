@@ -1,3 +1,4 @@
+opencv-python-headless
 boto3
 pandas
 tensorflow
@@ -5,6 +6,4 @@ Pillow
 numpy
 torch
 torchvision
-ultralytics
-supervision
 streamlit-draw-lines==0.0.2

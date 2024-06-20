@@ -4,8 +4,7 @@ import numpy as np
 import torch
 from torchvision import transforms
 import cv2
-from ultralytics import RTDETR, YOLO
-import supervision as sv
+
 from lib import download_file, send_discord_notification
 
 st.set_page_config(page_title="Vehicle Detection Interface", layout="wide")
@@ -17,6 +16,8 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 @st.cache_resource
 def get_model():
+    from ultralytics import RTDETR, YOLO
+    import supervision as sv
     download_file('traffmind-models', 'rtdetr-l.pt', 'rtdetr-l.pt')
 
     class_model_path = './model/yolov8-cls.yaml'
@@ -35,6 +36,7 @@ class_model = get_model()
 
 @st.cache_resource
 def load_model():
+    from ultralytics import RTDETR
     return RTDETR('rtdetr-l.pt')  # Path to your model
 
 model = load_model()
@@ -84,6 +86,8 @@ def apply_detections_to_frame(frame, detections, class_results):
 
 # Function to detect objects and draw bounding boxes
 def detect_objects_and_draw(image):
+    from ultralytics import RTDETR, YOLO
+    import supervision as sv
     frame = np.array(image)
     original_frame = frame.copy()
     frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
