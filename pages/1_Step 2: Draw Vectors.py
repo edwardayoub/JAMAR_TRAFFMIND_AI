@@ -4,6 +4,7 @@ from lib.aws import list_files_paginated, extract_first_frame, convert_lines_to_
 from lib.sagemaker_processing import run
 import importlib  
 import draw_lines
+from collections import defaultdict
 import logging
 import base64
 import cv2
@@ -25,6 +26,9 @@ bg_image = None
 if 'vector_names' not in st.session_state:
     names = list_files_paginated("jamar", "client_upload/", file_type='*')
     st.session_state['vector_names'] = [name.split('/')[-1] for name in names]
+
+if 'names_to_vectors' not in st.session_state:
+    st.session_state['names_to_vectors'] = defaultdict(list)
 
 refresh = st.button('Refresh Videos', key='refresh')
 
@@ -61,13 +65,15 @@ if bg_video_name:
 
 
 if 'bg_image' in st.session_state:
-    print(f"Drawing lines, {st.session_state.get('vectors')}")
-    lines = draw_lines.draw_lines(st.session_state.bg_image, st.session_state.image_width, st.session_state.image_height, lines=convert_vectors_to_lines(st.session_state.get('vectors')), key=st.session_state['bg_video_name'] + "_lines")
+    print(f"Drawing lines, {st.session_state['names_to_vectors'][bg_video_name]}, {convert_vectors_to_lines(st.session_state['names_to_vectors'][bg_video_name])}")
+    lines = draw_lines.draw_lines(st.session_state.bg_image, st.session_state.image_width, st.session_state.image_height, lines=convert_vectors_to_lines(st.session_state['names_to_vectors'][bg_video_name]), key=st.session_state['bg_video_name'] + "_lines")
 
 if lines is not None and lines != []:
     print(lines)
     vectors = convert_lines_to_vectors(lines)
     st.session_state['vectors'] = vectors
+    st.session_state['names_to_vectors'][bg_video_name] = vectors
+
 
     for i, (x1, y1, x2, y2) in enumerate(vectors):
         col1, col2 = st.columns(2)
@@ -76,7 +82,7 @@ if lines is not None and lines != []:
         with col1:
             st.write(f":blue[Vector {i + 1}]")
         with col2:
-            directions_list = ["N", "S", "E", "W"]
+            directions_list = ["N", "E", "S", "W"]
             option = None
             option = st.selectbox(f"Vector {i + 1} Direction", directions_list, key=f"direction_{i}")
             if option:
