@@ -1,9 +1,11 @@
 import streamlit as st
-from streamlit_drawable_canvas import st_canvas
 from PIL import Image
 from lib.aws import list_files_paginated, extract_first_frame, convert_lines_to_vectors, write_vectors_to_s3
 from lib.sagemaker_processing import run
+from components.DrawLine.draw_lines import draw_lines
 import logging
+import base64
+import cv2
 
 logger = logging.getLogger(st.__name__)
 
@@ -40,42 +42,26 @@ def get_first_frame(video_name):
 def get_image_from_frame(frame):
     return Image.fromarray(frame)
 
+lines = []
+
 if bg_video_name:
-    logger.warning(f"line 44, calling get image from frame: {bg_video_name}")
     if 'bg_video_name' not in st.session_state or st.session_state['bg_video_name'] != bg_video_name:
         frame = get_first_frame(bg_video_name)
         if frame is not None:
-            bg_image = get_image_from_frame(frame)
+            # convert array to bytes
+            _, encoded_frame = cv2.imencode('.png', frame)
+            bg_image = base64.b64encode(encoded_frame).decode('utf-8')
             st.session_state['bg_image'] = bg_image
             st.session_state['bg_video_name'] = bg_video_name
             st.session_state['canvas_result'] = None  # Clear canvas
 
+
 if 'bg_image' in st.session_state:
-    bg_image = st.session_state['bg_image']
-    width, height = bg_image.size
-else:
-    width, height = 800, 800
+    print("Drawing lines")
+    lines = draw_lines(st.session_state.bg_image)
 
-logger.warning(f"about to draw canvas")
-logger.warning(f"bg_image value: {bg_image}")
-logger.warning(f"bg_image session statevalue: {st.session_state.get('bg_image', None)}")
-canvas_result = st_canvas(
-    fill_color="rgba(255, 165, 0, 0.3)",
-    stroke_width=stroke_width,
-    stroke_color='Black',
-    background_color="#000000",
-    background_image=st.session_state.get('bg_image'),
-    update_streamlit=True,
-    width=width,
-    height=height,
-    drawing_mode=drawing_mode,
-    display_toolbar=True,
-    key=st.session_state['bg_video_name'] + 'canvas' if st.session_state.get('bg_video_name', False) else "canvas"
-)
-
-
-if canvas_result.json_data is not None and canvas_result.json_data['objects'] != []:
-    vectors = convert_lines_to_vectors(canvas_result.json_data['objects'])
+if lines is not None and lines != []:
+    vectors = convert_lines_to_vectors(lines)
     st.session_state['vectors'] = vectors
 
     for i, (x1, y1, x2, y2) in enumerate(vectors):

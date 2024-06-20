@@ -147,12 +147,6 @@ def write_vectors_to_s3(vectors, bucket, key):
 def extract_first_frame(bucket, key):
     import cv2
 
-    from botocore.config import Config
-
-    my_config = Config(
-        signature_version = 's3v4',
-    )
-
     s3_client = boto3.client('s3', region_name="us-east-2", aws_access_key_id=access_key, aws_secret_access_key=secret_key)
     logger.warning("generating presigned url")
     
