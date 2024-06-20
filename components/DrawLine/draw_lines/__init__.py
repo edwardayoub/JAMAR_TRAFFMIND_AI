@@ -9,7 +9,7 @@ frontend_dir = os.path.join(parent_dir, "frontend", "build")
 def draw_lines(image, width, height):
     return components.declare_component(
         "draw_lines",
-        #path="./frontend/build"
+        path=frontend_dir,
         #url=frontend_dir
-        url="http://localhost:3001",
+        #url="http://localhost:3001",
     )(image=image, width=width, height=height)
