@@ -8,5 +8,3 @@ torch
 torchvision
 ultralytics
 supervision
-streamlit-drawable-canvas==0.8.0
-
