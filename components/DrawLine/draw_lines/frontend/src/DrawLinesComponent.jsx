@@ -12,20 +12,19 @@ class LineDrawing extends StreamlitComponentBase {
       image: this.props.args["image"],
       width: this.props.args["width"],
       height: this.props.args["height"],
-      lines: [],
+      lines: this.props.args["lines"],
       isDrawing: false,
     }
-    console.log(this.state.width, this.state.height);
+    console.log("LineDrawing constructor");
+    console.log(this.state);
     this.canvasRef = React.createRef()
   }
 
   componentDidMount() {
-    this.drawInitialImage();
+    this.drawLines();
   }
 
   componentDidUpdate(prevProps, prevState) {
-
-
     if (this.state.lines !== prevState.lines) {
       this.drawLines()
     }
@@ -62,6 +61,7 @@ class LineDrawing extends StreamlitComponentBase {
   drawLines = () => {
     const canvas = this.canvasRef.current
     if (!canvas || !this.getCurrentImage()) return
+    Streamlit.setComponentValue(this.state.lines)
     const ctx = canvas.getContext("2d")
     const currentImage = new Image()
 
@@ -83,7 +83,6 @@ class LineDrawing extends StreamlitComponentBase {
     }
 
     currentImage.src = `data:image/png;base64,${this.state.image}`
-    Streamlit.setComponentValue(this.state.lines)
   }
 
   getCurrentImage() {

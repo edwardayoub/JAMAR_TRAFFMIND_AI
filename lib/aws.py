@@ -105,7 +105,14 @@ def send_discord_notification(file_name, file_size_mb, title, description, color
     if response.status_code != 204:
         raise Exception(f"Request to Discord returned an error {response.status_code}, the response is:\n{response.text}")
 
-
+def convert_vectors_to_lines(vectors):
+    if vectors is None:
+        return []
+    lines = []
+    for vector in vectors:
+        x1, y1, x2, y2 = vector
+        lines.append({"start": {"x": x1, "y": y1}, "end": {"x": x2, "y": y2}})
+    return lines
 
 def convert_lines_to_vectors(lines_json):
     vectors = []
