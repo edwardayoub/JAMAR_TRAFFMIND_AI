@@ -2,7 +2,8 @@ import streamlit as st
 from PIL import Image
 from lib.aws import list_files_paginated, extract_first_frame, convert_lines_to_vectors, write_vectors_to_s3
 from lib.sagemaker_processing import run
-from components.DrawLine.draw_lines import draw_lines
+import importlib  
+import draw_lines
 import logging
 import base64
 import cv2
@@ -61,7 +62,7 @@ if bg_video_name:
 
 if 'bg_image' in st.session_state:
     print("Drawing lines")
-    lines = draw_lines(st.session_state.bg_image, st.session_state.image_width, st.session_state.image_height)
+    lines = draw_lines.draw_lines(st.session_state.bg_image, st.session_state.image_width, st.session_state.image_height)
 
 if lines is not None and lines != []:
     print(lines)
