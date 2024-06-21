@@ -21,10 +21,12 @@ class LineDrawing extends StreamlitComponentBase {
   }
 
   componentDidMount() {
+    console.log("component did mount");
     this.drawLines();
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log("component did update");
     if (this.state.lines !== prevState.lines) {
       this.drawLines()
     }
@@ -59,6 +61,7 @@ class LineDrawing extends StreamlitComponentBase {
   }
 
   drawLines = () => {
+    console.log("drawing lines in react app");
     const canvas = this.canvasRef.current
     if (!canvas || !this.getCurrentImage()) return
     Streamlit.setComponentValue(this.state.lines)
