@@ -63,9 +63,8 @@ if bg_video_name:
             st.session_state.image_height = image_height
             st.session_state.image_width = image_width
             # convert array to bytes
-            bg_image = base64_encode_image(frame)
 
-            st.session_state['bg_image'] = bg_image
+            st.session_state['bg_image'] = base64_encode_image(frame)
             st.session_state['bg_video_name'] = bg_video_name
             st.session_state['canvas_result'] = None  # Clear canvas
 
