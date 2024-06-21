@@ -66,10 +66,12 @@ if bg_video_name:
 
 if 'bg_image' in st.session_state:
     print(f"Drawing lines, {st.session_state['names_to_vectors'][bg_video_name]}, {convert_vectors_to_lines(st.session_state['names_to_vectors'][bg_video_name])}")
+    print(f"key is {st.session_state['bg_video_name']}_lines")
     lines = draw_lines.draw_lines(st.session_state.bg_image, st.session_state.image_width, st.session_state.image_height, lines=convert_vectors_to_lines(st.session_state['names_to_vectors'][bg_video_name]), key=st.session_state['bg_video_name'] + "_lines")
+    print(f"lines returned from component are {lines}")
+
 
 if lines is not None and lines != []:
-    print(lines)
     vectors = convert_lines_to_vectors(lines)
     st.session_state['vectors'] = vectors
     st.session_state['names_to_vectors'][bg_video_name] = vectors
