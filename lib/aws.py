@@ -60,6 +60,7 @@ import boto3
 from botocore.exceptions import ClientError
 import logging
 
+@st.cache_data
 def generate_presigned_url(bucket_name, object_name, expiration=3600):
     """Generate a presigned URL to share an S3 object.
 
@@ -105,6 +106,7 @@ def send_discord_notification(file_name, file_size_mb, title, description, color
     if response.status_code != 204:
         raise Exception(f"Request to Discord returned an error {response.status_code}, the response is:\n{response.text}")
 
+@st.cache_data
 def convert_vectors_to_lines(vectors):
     if vectors is None:
         return []
@@ -114,6 +116,7 @@ def convert_vectors_to_lines(vectors):
         lines.append({"start": {"x": x1, "y": y1}, "end": {"x": x2, "y": y2}})
     return lines
 
+@st.cache_data
 def convert_lines_to_vectors(lines_json):
     vectors = []
     if not lines_json:
