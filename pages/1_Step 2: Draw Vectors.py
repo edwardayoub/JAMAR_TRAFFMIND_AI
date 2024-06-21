@@ -47,7 +47,6 @@ def get_first_frame(video_name):
 def get_image_from_frame(frame):
     return Image.fromarray(frame)
 
-@st.cache_data
 def base64_encode_image(frame):
     _, encoded_frame = cv2.imencode('.png', frame)
     return base64.b64encode(encoded_frame).decode('utf-8')
