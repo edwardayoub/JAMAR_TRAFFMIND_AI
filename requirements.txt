@@ -2,3 +2,4 @@ opencv-python-headless
 boto3
 pandas
 streamlit-draw-lines==0.0.6
+streamlit-profiler
