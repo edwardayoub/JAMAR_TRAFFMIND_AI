@@ -65,10 +65,10 @@ if bg_video_name:
 
 
 if 'bg_image' in st.session_state:
-    print(f"Drawing lines, {st.session_state['names_to_vectors'][bg_video_name]}, {convert_vectors_to_lines(st.session_state['names_to_vectors'][bg_video_name])}")
-    print(f"key is {st.session_state['bg_video_name']}_lines")
+    # print(f"Drawing lines, {st.session_state['names_to_vectors'][bg_video_name]}, {convert_vectors_to_lines(st.session_state['names_to_vectors'][bg_video_name])}")
+    # print(f"key is {st.session_state['bg_video_name']}_lines")
     lines = draw_lines.draw_lines(st.session_state.bg_image, st.session_state.image_width, st.session_state.image_height, lines=convert_vectors_to_lines(st.session_state['names_to_vectors'][bg_video_name]), key=st.session_state['bg_video_name'] + "_lines")
-    print(f"lines returned from component are {lines}")
+    # print(f"lines returned from component are {lines}")
 
 
 if lines is not None and lines != []:
@@ -79,7 +79,7 @@ if lines is not None and lines != []:
 
     for i, (x1, y1, x2, y2) in enumerate(vectors):
         col1, col2 = st.columns(2)
-        print(f"Vector {i + 1}")
+        # print(f"Vector {i + 1}")
         
         with col1:
             st.write(f":blue[Vector {i + 1}]")
