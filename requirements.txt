@@ -6,4 +6,4 @@ Pillow
 numpy
 torch
 torchvision
-streamlit-draw-lines==0.0.4
+streamlit-draw-lines==0.0.5
